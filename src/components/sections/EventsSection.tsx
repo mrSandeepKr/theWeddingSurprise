@@ -1,13 +1,15 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Palette, Music, Users } from 'lucide-react';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 export default function EventsSection() {
   const events = [
     {
       title: "Haldi Ceremony",
-      date: "December 19, 2024",
-      time: "10:00 AM - 12:00 PM",
+      date: "February 4, 2026",
+      time: "10:00 AM - 12:00 AM",
       venue: "Family Home - Garden Area",
       address: "123 Family Street, City, State",
       description: "Join us for the traditional Haldi ceremony filled with turmeric, laughter, and blessings.",
@@ -67,14 +69,23 @@ export default function EventsSection() {
     return colorMap[color as keyof typeof colorMap] || "border-rose-200 bg-rose-50/50";
   };
 
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
+
   return (
     <section id="events" className="py-20 px-6 bg-white">
-      <div className="max-w-6xl mx-auto">
+      <motion.div
+        ref={ref}
+        className="max-w-6xl mx-auto"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-serif">
+          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
             Wedding Events
           </h2>
-          <p className="text-lg text-rose-700 max-w-2xl mx-auto">
+          <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
             Join us for a series of beautiful celebrations leading up to our special day. Each event is a unique part of our wedding journey.
           </p>
         </div>
@@ -91,22 +102,22 @@ export default function EventsSection() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                          {event.title}
+                          {event.title} {/* Consider font-playfair here if desired */}
                         </h3>
                         <div className="space-y-2 mb-4">
-                          <div className="flex items-center text-gray-700">
+                          <div className="flex items-center text-gray-700 font-crimson">
                             <Calendar className="h-4 w-4 mr-2" />
                             <span>{event.date}</span>
                           </div>
-                          <div className="flex items-center text-gray-700">
+                          <div className="flex items-center text-gray-700 font-crimson">
                             <Clock className="h-4 w-4 mr-2" />
                             <span>{event.time}</span>
                           </div>
-                          <div className="flex items-start text-gray-700">
+                          <div className="flex items-start text-gray-700 font-crimson">
                             <MapPin className="h-4 w-4 mr-2 mt-1 flex-shrink-0" />
                             <div>
-                              <div className="font-medium">{event.venue}</div>
-                              <div className="text-sm">{event.address}</div>
+                              <div className="font-medium font-crimson">{event.venue}</div>
+                              <div className="text-sm font-crimson">{event.address}</div>
                             </div>
                           </div>
                         </div>
@@ -133,27 +144,27 @@ export default function EventsSection() {
         <div className="mt-16 text-center">
           <Card className="border-rose-200 shadow-lg bg-gradient-to-r from-rose-50 to-pink-50">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold text-rose-800 mb-4">
+              <h3 className="text-2xl font-semibold text-rose-800 mb-4 font-playfair">
                 Dress Code
               </h3>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <h4 className="font-semibold text-rose-700 mb-2">Haldi & Mehendi</h4>
-                  <p className="text-rose-600">Bright colors, comfortable traditional wear</p>
+                  <h4 className="font-semibold text-rose-700 mb-2 font-playfair">Haldi & Mehendi</h4>
+                  <p className="text-rose-600 font-crimson">Bright colors, comfortable traditional wear</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-rose-700 mb-2">Sangeet</h4>
-                  <p className="text-rose-600">Festive attire, ready to dance!</p>
+                  <h4 className="font-semibold text-rose-700 mb-2 font-playfair">Sangeet</h4>
+                  <p className="text-rose-600 font-crimson">Festive attire, ready to dance!</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-rose-700 mb-2">Wedding & Reception</h4>
-                  <p className="text-rose-600">Formal traditional or contemporary wear</p>
+                  <h4 className="font-semibold text-rose-700 mb-2 font-playfair">Wedding & Reception</h4>
+                  <p className="text-rose-600 font-crimson">Formal traditional or contemporary wear</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

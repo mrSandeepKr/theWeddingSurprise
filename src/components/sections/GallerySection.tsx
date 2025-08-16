@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, Play, X } from 'lucide-react';
-
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 export default function GallerySection() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
@@ -31,12 +32,19 @@ export default function GallerySection() {
   const filteredItems = selectedCategory === 'all' 
     ? galleryItems 
     : galleryItems.filter(item => item.category === selectedCategory);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
 
   return (
     <section id="gallery" className="py-20 px-6 bg-gradient-to-br from-rose-50 to-pink-50">
-      <div className="max-w-6xl mx-auto">
+      <motion.div
+        ref={ref}
+        className="max-w-6xl mx-auto"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}>
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-serif">
+          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
             Photo & Video Gallery
           </h2>
           <p className="text-lg text-rose-700 max-w-2xl mx-auto mb-8">
@@ -92,15 +100,14 @@ export default function GallerySection() {
             <CardContent className="p-6">
               <Camera className="h-8 w-8 text-rose-600 mx-auto mb-4" />
               <p className="text-rose-700 italic">
-                High-resolution photos and videos from our wedding celebrations will be added here. 
+                High-resolution photos and videos from our wedding celebrations will be added here.
                 Stay tuned for beautiful memories from our special day!
               </p>
             </CardContent>
           </Card>
         </div>
-      </div>
-
-      {/* Lightbox Modal */}
+      </motion.div>
+      
       {lightboxImage && (
         <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl w-full">
