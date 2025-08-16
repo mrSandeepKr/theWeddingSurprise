@@ -1,208 +1,448 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Play, X } from "lucide-react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-export default function GallerySection() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+import { X } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 
-  const categories = [
-    { id: "all", name: "All Photos" },
-    { id: "prewedding", name: "Pre-Wedding" },
-    { id: "engagement", name: "Engagement" },
-    { id: "ceremonies", name: "Ceremonies" },
-    { id: "family", name: "Family Moments" },
-  ];
+// Direct imports for all images
+import couple1 from "@/assets/couple_1.webp";
+import couple2 from "@/assets/couple_2.webp";
+import couple3 from "@/assets/couple_3.webp";
+import couple4 from "@/assets/couple_4.webp";
+import couple5 from "@/assets/couple_5.webp";
+import couple6 from "@/assets/couple_6.webp";
+import couple7 from "@/assets/couple_7.webp";
+import couple8 from "@/assets/couple_8.webp";
+import couple9 from "@/assets/couple_9.webp";
+import couple10 from "@/assets/couple_10.webp";
+import couple11 from "@/assets/couple_11.webp";
+import couple12 from "@/assets/couple_12.webp";
+import couple13 from "@/assets/couple_13.webp";
+import couple14 from "@/assets/couple_14.webp";
+import couple15 from "@/assets/couple_15.webp";
+import couple16 from "@/assets/couple_16.webp";
+import couple17 from "@/assets/couple_17.webp";
+import couple18 from "@/assets/couple_18.webp";
+import couple19 from "@/assets/couple_19.webp";
+import couple20 from "@/assets/couple_20.webp";
+import couple21 from "@/assets/couple_21.webp";
+import couple22 from "@/assets/couple_22.webp";
+import couple23 from "@/assets/couple_23.webp";
+import couple24 from "@/assets/couple_24.webp";
+import family1 from "@/assets/family_1.webp";
+import family2 from "@/assets/family_2.webp";
+import family3 from "@/assets/family_3.webp";
+import family4 from "@/assets/family_4.webp";
+import family5 from "@/assets/family_5.webp";
+import family6 from "@/assets/family_6.webp";
+import family7 from "@/assets/family_7.webp";
+import preWedding1 from "@/assets/pre_wedding_1.webp";
+import preWedding2 from "@/assets/pre_wedding_2.webp";
 
-  // Placeholder gallery items (in real app, these would come from the video frames)
-  const galleryItems = [
-    {
-      id: 1,
-      category: "prewedding",
-      type: "image",
-      title: "Pre-Wedding Shoot",
-      description: "Beautiful moments captured during our pre-wedding session",
-    },
-    {
-      id: 2,
-      category: "engagement",
-      type: "image",
-      title: "Engagement Ceremony",
-      description: "The day we officially got engaged",
-    },
-    {
-      id: 3,
-      category: "ceremonies",
-      type: "video",
-      title: "Haldi Highlights",
-      description: "Fun moments from the Haldi ceremony",
-    },
-    {
-      id: 4,
-      category: "prewedding",
-      type: "image",
-      title: "Romantic Moments",
-      description: "Candid shots from our photo session",
-    },
-    {
-      id: 5,
-      category: "family",
-      type: "image",
-      title: "Family Gathering",
-      description: "Both families coming together",
-    },
-    {
-      id: 6,
-      category: "ceremonies",
-      type: "image",
-      title: "Mehendi Night",
-      description: "Beautiful henna designs and celebrations",
-    },
-    {
-      id: 7,
-      category: "ceremonies",
-      type: "video",
-      title: "Sangeet Performances",
-      description: "Dance performances from sangeet night",
-    },
-    {
-      id: 8,
-      category: "family",
-      type: "image",
-      title: "Blessing Moments",
-      description: "Receiving blessings from elders",
-    },
-    {
-      id: 9,
-      category: "prewedding",
-      type: "image",
-      title: "Traditional Attire",
-      description: "Dressed in traditional wedding outfits",
-    },
-  ];
+// Types and Constants
+const CATEGORIES = [
+  "All Photos",
+  "US",
+  "Pre-Wedding",
+  "Family Moments",
+] as const;
 
-  const filteredItems =
-    selectedCategory === "all"
-      ? galleryItems
-      : galleryItems.filter((item) => item.category === selectedCategory);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
+type Category = (typeof CATEGORIES)[number];
+type SpecificCategory = Exclude<Category, "All Photos">;
+type MasterImage = { image: string; category: SpecificCategory };
 
+const masterImages: MasterImage[] = [
+  // US (Couple) photos
+  { image: couple1, category: "US" },
+  { image: couple2, category: "US" },
+  { image: couple3, category: "US" },
+  { image: couple4, category: "US" },
+  { image: couple5, category: "US" },
+  { image: couple6, category: "US" },
+  { image: couple7, category: "US" },
+  { image: couple8, category: "US" },
+  { image: couple9, category: "US" },
+  { image: couple10, category: "US" },
+  { image: couple11, category: "US" },
+  { image: couple12, category: "US" },
+  { image: couple13, category: "US" },
+  { image: couple14, category: "US" },
+  { image: couple15, category: "US" },
+  { image: couple16, category: "US" },
+  { image: couple17, category: "US" },
+  { image: couple18, category: "US" },
+  { image: couple19, category: "US" },
+  { image: couple20, category: "US" },
+  { image: couple21, category: "US" },
+  { image: couple22, category: "US" },
+  { image: couple23, category: "US" },
+  { image: couple24, category: "US" },
+  // Pre-Wedding photos
+  { image: preWedding1, category: "Pre-Wedding" },
+  { image: preWedding2, category: "Pre-Wedding" },
+  // Family photos
+  { image: family1, category: "Family Moments" },
+  { image: family2, category: "Family Moments" },
+  { image: family3, category: "Family Moments" },
+  { image: family4, category: "Family Moments" },
+  { image: family5, category: "Family Moments" },
+  { image: family6, category: "Family Moments" },
+  { image: family7, category: "Family Moments" },
+];
+
+// Loading Spinner Component
+function LoadingSpinner() {
   return (
-    <section
-      id="gallery"
-      className="py-20 px-6 bg-gradient-to-br from-rose-50 to-pink-50"
-    >
+    <div className="absolute inset-0 flex items-center justify-center bg-rose-100">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-600"></div>
+    </div>
+  );
+}
+
+// Error Placeholder Component
+function ErrorPlaceholder() {
+  return (
+    <div className="flex flex-col items-center justify-center text-rose-400 p-4">
+      <div className="text-4xl mb-2">📷</div>
+      <p className="text-sm text-center">Image not available</p>
+    </div>
+  );
+}
+
+// Hover Overlay Component
+function HoverOverlay() {
+  return (
+    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="text-sm font-medium">Click to enlarge</span>
+      </div>
+    </div>
+  );
+}
+
+// Gallery Item Component
+interface GalleryItemProps {
+  item: MasterImage;
+  idx: number;
+  isLoading: boolean;
+  hasError: boolean;
+  onImageClick: (imageSrc: string) => void;
+  onImageLoadStart: (imageSrc: string) => void;
+  onImageLoad: (imageSrc: string) => void;
+  onImageError: (imageSrc: string) => void;
+}
+
+function GalleryItem({
+  item,
+  idx,
+  isLoading,
+  hasError,
+  onImageClick,
+  onImageLoadStart,
+  onImageLoad,
+  onImageError,
+}: GalleryItemProps) {
+  return (
+    <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
       <motion.div
-        ref={ref}
-        className="max-w-6xl mx-auto"
-        initial={{ opacity: 0, y: 50 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="p-1"
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5 }}
+        whileHover={{ scale: 1.05 }}
       >
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
-            Photo & Video Gallery
-          </h2>
-          <p className="text-lg text-rose-700 max-w-2xl mx-auto mb-8">
-            Relive the beautiful moments from our journey together through these
-            carefully curated photos and videos.
-          </p>
+        <div
+          className="relative flex h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] items-center justify-center rounded-2xl shadow-sm cursor-pointer overflow-hidden group"
+          onClick={() => !hasError && onImageClick(item.image)}
+        >
+          {isLoading && <LoadingSpinner />}
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {categories.map((category) => (
-              <Button
-                key={category.id}
-                variant={
-                  selectedCategory === category.id ? "default" : "outline"
-                }
-                onClick={() => setSelectedCategory(category.id)}
-                className={`${
-                  selectedCategory === category.id
-                    ? "bg-rose-600 hover:bg-rose-700 text-white"
-                    : "border-rose-600 text-rose-600 hover:bg-rose-50"
-                }`}
-              >
-                {category.name}
-              </Button>
-            ))}
-          </div>
-        </div>
+          {hasError ? (
+            <ErrorPlaceholder />
+          ) : (
+            <img
+              src={item.image}
+              alt={`${item.category} ${idx + 1}`}
+              className="w-full object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+              onLoadStart={() => onImageLoadStart(item.image)}
+              onLoad={() => onImageLoad(item.image)}
+              onError={() => onImageError(item.image)}
+              style={{
+                opacity: isLoading ? 0 : 1,
+                transition: "opacity 0.3s ease-in-out",
+              }}
+            />
+          )}
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
-            <Card
-              key={item.id}
-              className="border-rose-200 shadow-lg hover:shadow-xl transition-all duration-300 group overflow-hidden"
-            >
-              <CardContent className="p-0">
-                <div
-                  className="relative aspect-square bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center cursor-pointer"
-                  onClick={() =>
-                    item.type === "image" && setLightboxImage(item.title)
-                  }
-                >
-                  {item.type === "image" ? (
-                    <Camera className="h-16 w-16 text-rose-400 group-hover:text-rose-600 transition-colors" />
-                  ) : (
-                    <Play className="h-16 w-16 text-rose-400 group-hover:text-rose-600 transition-colors" />
-                  )}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity text-white text-center p-4">
-                      <h3 className="font-semibold text-lg mb-1">
-                        {item.title}
-                      </h3>
-                      <p className="text-sm">{item.description}</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Note about actual content */}
-        <div className="mt-12 text-center">
-          <Card className="border-rose-200 shadow-lg bg-white/80 backdrop-blur-sm">
-            <CardContent className="p-6">
-              <Camera className="h-8 w-8 text-rose-600 mx-auto mb-4" />
-              <p className="text-rose-700 italic">
-                High-resolution photos and videos from our wedding celebrations
-                will be added here. Stay tuned for beautiful memories from our
-                special day!
-              </p>
-            </CardContent>
-          </Card>
+          {!hasError && <HoverOverlay />}
         </div>
       </motion.div>
+    </CarouselItem>
+  );
+}
 
-      {lightboxImage && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
-          <div className="relative max-w-4xl w-full">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20"
-              onClick={() => setLightboxImage(null)}
-            >
-              <X className="h-6 w-6" />
-            </Button>
-            <div className="bg-gradient-to-br from-rose-100 to-pink-100 aspect-video flex items-center justify-center rounded-lg">
-              <div className="text-center text-rose-700">
-                <Camera className="h-16 w-16 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold">{lightboxImage}</h3>
-                <p className="text-sm opacity-75 mt-2">
-                  Photo will be displayed here
-                </p>
-              </div>
-            </div>
-          </div>
+// Category Filter Component
+interface CategoryFilterProps {
+  selectedCategory: Category;
+  onCategoryChange: (category: Category) => void;
+}
+
+function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryFilterProps) {
+  return (
+    <div className="flex flex-wrap justify-center gap-3 mb-8">
+      {CATEGORIES.map((cat) => (
+        <Button
+          key={cat}
+          variant={selectedCategory === cat ? "default" : "outline"}
+          onClick={() => onCategoryChange(cat)}
+          className={`${
+            selectedCategory === cat
+              ? "bg-rose-600 hover:bg-rose-700 text-white"
+              : "border-rose-600 text-rose-600 hover:bg-rose-50"
+          }`}
+        >
+          {cat}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
+// Gallery Carousel Component
+interface GalleryCarouselProps {
+  images: MasterImage[];
+  imageErrors: Set<string>;
+  imageLoading: Set<string>;
+  onImageClick: (imageSrc: string) => void;
+  onImageLoadStart: (imageSrc: string) => void;
+  onImageLoad: (imageSrc: string) => void;
+  onImageError: (imageSrc: string) => void;
+  autoplay: React.MutableRefObject<any>;
+}
+
+function GalleryCarousel({
+  images,
+  imageErrors,
+  imageLoading,
+  onImageClick,
+  onImageLoadStart,
+  onImageLoad,
+  onImageError,
+  autoplay,
+}: GalleryCarouselProps) {
+  return (
+    <Carousel
+      className="w-full"
+      opts={{
+        loop: true,
+        align: "start",
+        skipSnaps: false,
+        dragFree: true,
+      }}
+      plugins={[autoplay.current]}
+    >
+      <CarouselContent className="-ml-2 md:-ml-4">
+        {images.map((item, idx) => {
+          const imageKey = `${item.category}-${idx}`;
+          const hasError = imageErrors.has(item.image);
+          const isLoading = imageLoading.has(item.image);
+
+          return (
+            <GalleryItem
+              key={imageKey}
+              item={item}
+              idx={idx}
+              isLoading={isLoading}
+              hasError={hasError}
+              onImageClick={onImageClick}
+              onImageLoadStart={onImageLoadStart}
+              onImageLoad={onImageLoad}
+              onImageError={onImageError}
+            />
+          );
+        })}
+      </CarouselContent>
+      <CarouselPrevious className="hidden md:flex -left-12 hover:bg-rose-100" />
+      <CarouselNext className="hidden md:flex -right-12 hover:bg-rose-100" />
+    </Carousel>
+  );
+}
+
+// Image Modal Component
+interface ImageModalProps {
+  selectedImage: string | null;
+  onClose: () => void;
+}
+
+function ImageModal({ selectedImage, onClose }: ImageModalProps) {
+  if (!selectedImage) return null;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="relative max-w-7xl max-h-full"
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.5, opacity: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          src={selectedImage}
+          alt="Enlarged view"
+          className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+        />
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-all duration-200"
+        >
+          <X className="h-6 w-6" />
+        </button>
+
+        {/* Navigation hint */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black bg-opacity-50 px-3 py-1 rounded-full">
+          Press ESC to close
         </div>
-      )}
-    </section>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// Gallery Header Component
+function GalleryHeader() {
+  return (
+    <div className="text-center mb-10">
+      <h2 className="text-3xl md:text-4xl font-bold text-rose-800 font-playfair">
+        Gallery
+      </h2>
+      <p className="text-rose-700 mt-3">
+        Browse moments from US, Pre-Wedding, and Family celebrations.
+      </p>
+    </div>
+  );
+}
+
+// Main Gallery Section Component
+export default function GallerySection() {
+  const [selectedCategory, setSelectedCategory] = useState<Category>("All Photos");
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+  const [imageLoading, setImageLoading] = useState<Set<string>>(new Set());
+
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px 0px" });
+
+  // Autoplay plugin for continuous carousel
+  const autoplay = useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
+  );
+
+  const imagesToShow =
+    selectedCategory === "All Photos"
+      ? masterImages
+      : masterImages.filter((i) => i.category === selectedCategory);
+
+  const handleImageClick = (imageSrc: string) => {
+    setSelectedImage(imageSrc);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
+  const handleImageError = (imageSrc: string) => {
+    setImageErrors((prev) => new Set([...prev, imageSrc]));
+    setImageLoading((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(imageSrc);
+      return newSet;
+    });
+  };
+
+  const handleImageLoad = (imageSrc: string) => {
+    setImageLoading((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(imageSrc);
+      return newSet;
+    });
+  };
+
+  const handleImageLoadStart = (imageSrc: string) => {
+    setImageLoading((prev) => new Set([...prev, imageSrc]));
+  };
+
+  // Handle keyboard navigation for modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedImage) {
+        closeModal();
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedImage]);
+
+  return (
+    <>
+      <section
+        id="gallery"
+        className="py-16 px-6 bg-gradient-to-br from-rose-50 to-pink-50"
+      >
+        <motion.div
+          ref={sectionRef}
+          className="max-w-full mx-auto md:px-10"
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <GalleryHeader />
+          
+          <CategoryFilter
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+          />
+
+          <GalleryCarousel
+            images={imagesToShow}
+            imageErrors={imageErrors}
+            imageLoading={imageLoading}
+            onImageClick={handleImageClick}
+            onImageLoadStart={handleImageLoadStart}
+            onImageLoad={handleImageLoad}
+            onImageError={handleImageError}
+            autoplay={autoplay}
+          />
+        </motion.div>
+      </section>
+
+      <ImageModal selectedImage={selectedImage} onClose={closeModal} />
+    </>
   );
 }
