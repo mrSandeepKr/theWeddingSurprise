@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Menu, X, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Menu, X, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Our Story', href: '#story' },
-    { name: 'Events', href: '#events' },
-    { name: 'Gallery', href: '#gallery' },
-    { name: 'RSVP', href: '#rsvp' },
-    { name: 'Guest Info', href: '#guest-info' },
-    { name: 'Memory Wall', href: '#memory-wall' }
+    { name: "Home", href: "#home" },
+    { name: "Our Story", href: "#story" },
+    { name: "Events", href: "#events" },
+    { name: "Gallery", href: "#gallery" },
+    { name: "RSVP", href: "#rsvp" },
+    { name: "Guest Info", href: "#guest-info" },
+    { name: "Memory Wall", href: "#memory-wall" },
   ];
 
   const scrollToSection = (href: string) => {
     const element = document.getElementById(href.substring(1));
-    element?.scrollIntoView({ behavior: 'smooth' });
+    element?.scrollIntoView({ behavior: "smooth" });
     setIsOpen(false);
   };
 
@@ -27,9 +27,11 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Heart className="h-8 w-8 text-rose-600" />
-            <span className="ml-2 text-xl font-semibold text-rose-800">S & P</span>
+            <span className="ml-2 text-xl font-semibold text-rose-800">
+              S & P
+            </span>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
@@ -50,7 +52,11 @@ export default function Navbar() {
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </div>
