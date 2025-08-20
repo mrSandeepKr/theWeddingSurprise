@@ -236,9 +236,6 @@ export default function GuestInfoSection() {
                   <p className="text-rose-600 text-sm mb-2">
                     Vegetarian and non-vegetarian options available
                   </p>
-                  <p className="text-rose-600 text-sm">
-                    Please mention dietary restrictions in your RSVP
-                  </p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-rose-700 mb-2">

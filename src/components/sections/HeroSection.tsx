@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Heart } from "lucide-react";
 import CountdownTimer from "../CountdownTimer";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
+import heroImage from "@/assets/hero.webp";
+import logoVideo from "@/assets/logo_animated.mp4";
 
 export default function HeroSection() {
   const scrollToSection = (sectionId: string) => {
@@ -12,66 +13,98 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden pt-16"
+      className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-100/30 via-pink-100/30 to-orange-100/30"></div>
+      {/* Hero Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+
       <motion.div
-        className="relative z-10 text-center space-y-8 px-6 max-w-4xl mx-auto"
+        className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-16"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
       >
-        <div className="space-y-4">
-          <div className="flex items-center justify-center mb-6">
-            <Heart className="h-8 w-8 text-rose-500 animate-pulse" />
-          </div>
-          <h1 className="text-6xl md:text-8xl font-bold text-rose-800 mb-4 font-playfair">
+        <div className="space-y-6">
+          <motion.h1 
+            className="text-7xl md:text-9xl font-bold text-white mb-4 font-playfair tracking-wide"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
             Sandeep
-          </h1>
-          <div className="text-2xl md:text-3xl text-rose-600 font-light font-dancing">
+          </motion.h1>
+          
+          <motion.div 
+            className="text-3xl md:text-4xl text-white/90 font-light font-dancing"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
             &
-          </div>
-          <h1 className="text-6xl md:text-8xl font-bold text-rose-800 mb-8 font-playfair">
+          </motion.div>
+          
+          <motion.h1 
+            className="text-7xl md:text-9xl font-bold text-white mb-8 font-playfair tracking-wide"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+          >
             Payal
-          </h1>
+          </motion.h1>
         </div>
 
-        <div className="space-y-4">
-          <p className="text-xl md:text-2xl text-rose-700 font-light">
+        <motion.div 
+          className="mt-36 space-y-4 backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+        >
+          <p className="text-xl md:text-2xl text-white/95 font-light">
             <span className="font-crimson">Together with their families</span>
           </p>
-          <p className="text-lg md:text-xl text-rose-600 font-crimson">
+          <p className="text-lg md:text-xl text-white/90 font-crimson">
             request the honor of your presence
           </p>
-          <p className="text-2xl md:text-3xl text-rose-800 font-semibold font-playfair">
+          <p className="text-2xl md:text-3xl text-white font-semibold font-playfair">
             at their wedding celebration
           </p>
-          <p className="text-xl md:text-2xl text-rose-700 font-medium mt-4 font-crimson">
-            <span className="font-playfair">February 5, 2026</span>
+          <p className="text-xl md:text-2xl text-white/95 font-medium mt-4 font-crimson">
+            <span className="font-playfair text-2xl">February 5, 2026</span>
           </p>
-        </div>
+        </motion.div>
 
-        <div className="py-8">
+        <motion.div 
+          className="py-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.4 }}
+        >
           <CountdownTimer />
-        </div>
-
-        <div className="pt-4">
-          <Button
-            onClick={() => scrollToSection("story")}
-            className="bg-rose-600 hover:bg-rose-700 text-white px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            Our Journey
-          </Button>
-        </div>
+        </motion.div>
       </motion.div>
 
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 text-rose-200 text-6xl opacity-30">
+      {/* Elegant decorative elements */}
+      <motion.div 
+        className="absolute top-1/4 left-10 text-white/20 text-8xl"
+        initial={{ opacity: 0, rotate: -45 }}
+        animate={{ opacity: 1, rotate: 0 }}
+        transition={{ duration: 1.5, delay: 2 }}
+      >
         ❀
-      </div>
-      <div className="absolute bottom-20 right-10 text-rose-200 text-6xl opacity-30">
+      </motion.div>
+      <motion.div 
+        className="absolute bottom-1/4 right-10 text-white/20 text-8xl"
+        initial={{ opacity: 0, rotate: 45 }}
+        animate={{ opacity: 1, rotate: 0 }}
+        transition={{ duration: 1.5, delay: 2.2 }}
+      >
         ❀
-      </div>
+      </motion.div>
     </section>
   );
 }

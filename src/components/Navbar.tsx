@@ -10,7 +10,6 @@ export default function Navbar() {
     { name: "Our Story", href: "#story" },
     { name: "Events", href: "#events" },
     { name: "Gallery", href: "#gallery" },
-    { name: "RSVP", href: "#rsvp" },
     { name: "Guest Info", href: "#guest-info" },
     { name: "Memory Wall", href: "#memory-wall" },
   ];
@@ -22,23 +21,25 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm">
+    <nav className="fixed top-0 w-full bg-white/10 backdrop-blur-md z-50 border-b border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Heart className="h-8 w-8 text-rose-600" />
-            <span className="ml-2 text-xl font-semibold text-rose-800">
+            <div className="p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+              <Heart className="h-6 w-6 text-white" />
+            </div>
+            <span className="ml-3 text-xl font-semibold text-white font-playfair tracking-wide">
               S & P
             </span>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-rose-700 hover:text-rose-900 px-3 py-2 text-sm font-medium transition-colors"
+                className="text-white/90 hover:text-white hover:bg-white/20 px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full backdrop-blur-sm border border-transparent hover:border-white/30"
               >
                 {item.name}
               </button>
@@ -51,6 +52,7 @@ export default function Navbar() {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
+              className="text-white hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full"
             >
               {isOpen ? (
                 <X className="h-6 w-6" />
@@ -65,12 +67,12 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-white shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-white/10 backdrop-blur-md border-t border-white/20">
             {navItems.map((item) => (
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="block px-3 py-2 text-base font-medium text-rose-700 hover:text-rose-900 hover:bg-rose-50 w-full text-left"
+                className="block px-4 py-3 text-base font-medium text-white/90 hover:text-white hover:bg-white/20 w-full text-left rounded-lg transition-all duration-300 backdrop-blur-sm"
               >
                 {item.name}
               </button>
