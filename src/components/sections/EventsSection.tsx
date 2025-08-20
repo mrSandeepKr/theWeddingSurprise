@@ -33,7 +33,7 @@ const EVENTS_DATA: Event[] = [
     address: "123 Family Street, City, State",
     description:
       "Join us for the traditional Haldi ceremony filled with turmeric, laughter, and blessings. This sacred ritual marks the beginning of our wedding celebrations.",
-    icon: <Palette className="h-8 w-8 text-wedding-haldi-600" />,
+    icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-haldi-600" />,
     color: "haldi",
     image: "/src/assets/couple_1.webp",
     dressCode: "Bright colors, comfortable traditional wear",
@@ -140,7 +140,7 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-wedding-gold-100 to-wedding-gold-200 flex items-center justify-center">
-                  <div className="p-6 bg-white/90 rounded-full shadow-lg">
+                  <div className="p-1 md:p-6 bg-white/90 rounded-full shadow-lg">
                     {event.icon}
                   </div>
                 </div>
@@ -160,7 +160,7 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
                     {event.icon}
                   </div>
                   <div>
-                    <h3 className="text-3xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
+                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
                       {event.title}
                     </h3>
                   </div>
@@ -171,11 +171,11 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
                   <Calendar className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold text-lg">{event.date}</span>
+                  <span className="font-semibold test-sm sm:text-lg">{event.date}</span>
                 </div>
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
                   <Clock className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold text-lg">{event.time}</span>
+                  <span className="font-semibold test-sm sm:text-lg">{event.time}</span>
                 </div>
               </div>
 
@@ -183,10 +183,10 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
                 <MapPin className="h-6 w-6 mr-4 mt-1 flex-shrink-0 text-wedding-marigold-600" />
                 <div>
-                  <div className="font-bold font-['Poppins'] text-gray-800 text-lg">
+                  <div className="font-bold font-['Poppins'] text-gray-800 test-sm sm:text-lg">
                     {event.venue}
                   </div>
-                  <div className="text-base text-gray-600 font-['Poppins'] mt-1">
+                  <div className="text-sm sm:test-sm text-gray-600 font-['Poppins'] mt-1">
                     {event.address}
                   </div>
                 </div>
@@ -196,10 +196,10 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm border border-wedding-gold-200">
                 <Shirt className="h-6 w-6 mr-4 mt-1 flex-shrink-0 text-wedding-sindoor-600" />
                 <div>
-                  <div className="font-bold font-['Poppins'] text-wedding-sindoor-800 text-lg mb-1">
+                  <div className="font-bold font-['Poppins'] text-wedding-sindoor-800 test-sm sm:text-lg mb-1">
                     Dress Code
                   </div>
-                  <div className="text-base text-gray-700 font-['Poppins']">
+                  <div className="text-sm sm:test-sm text-gray-700 font-['Poppins']">
                     {event.dressCode}
                   </div>
                 </div>
@@ -207,7 +207,7 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
 
               {/* Description */}
               <div className="bg-white/40 rounded-xl p-3 backdrop-blur-sm shadow-sm">
-                <p className="text-gray-700 leading-relaxed font-['Poppins'] text-lg">
+                <p className="text-gray-700 leading-relaxed font-['Poppins'] text-sm md:text-lg">
                   {event.description}
                 </p>
               </div>
