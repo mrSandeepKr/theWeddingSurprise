@@ -1,7 +1,11 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Clock, MapPin, Palette, Music, Users, Shirt } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import brideIcon from "@/assets/bride_icon.png";
+import groomIcon from "@/assets/groom_icon.png";
+import flowerTop from "@/assets/flower_top.png";
+import flowerLily from "@/assets/flower_lily.png";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -17,14 +21,31 @@ interface Event {
   icon: JSX.Element;
   color: string;
   image?: string;
-  dressCode: string; // Added dress code to individual events
+  dressCode: string;
+  side: ('dulha' | 'dulhan')[]; // Changed to array
 }
+
+type EventSide = 'dulha' | 'dulhan'; // Removed 'both'
 
 // ============================================================================
 // CONSTANTS & DATA
 // ============================================================================
 
 const EVENTS_DATA: Event[] = [
+  {
+    title: "Mehendi Ceremony",
+    date: "February 3, 2026",
+    time: "2:00 PM - 6:00 PM",
+    venue: "Bride's Family Home",
+    address: "456 Mehendi Lane, City, State",
+    description:
+      "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
+    icon: <Palette className="h-8 w-8 text-wedding-mehendi-600" />,
+    color: "mehendi",
+    image: "/src/assets/couple_5.webp",
+    dressCode: "Bright traditional colors, comfortable for sitting",
+    side: ["dulhan"],
+  },
   {
     title: "Haldi Ceremony",
     date: "February 4, 2026",
@@ -37,6 +58,7 @@ const EVENTS_DATA: Event[] = [
     color: "haldi",
     image: "/src/assets/couple_1.webp",
     dressCode: "Bright colors, comfortable traditional wear",
+    side: ["dulha", "dulhan"], // Changed from "both" to array
   },
   {
     title: "Sangeet Night",
@@ -50,6 +72,7 @@ const EVENTS_DATA: Event[] = [
     color: "magenta",
     image: "/src/assets/couple_2.webp",
     dressCode: "Festive attire, ready to dance!",
+    side: ["dulha", "dulhan"],
   },
   {
     title: "Wedding Ceremony",
@@ -63,6 +86,7 @@ const EVENTS_DATA: Event[] = [
     color: "sindoor",
     image: "/src/assets/couple_3.webp",
     dressCode: "Formal traditional or contemporary wear",
+    side: ["dulha", "dulhan"],
   },
   {
     title: "Reception Dinner",
@@ -76,6 +100,7 @@ const EVENTS_DATA: Event[] = [
     color: "royal",
     image: "/src/assets/couple_4.webp",
     dressCode: "Formal traditional or contemporary wear",
+    side: ["dulha"], 
   },
 ];
 
@@ -99,20 +124,119 @@ const getColorClasses = (color: string): string => {
 };
 
 // ============================================================================
+// SEGMENTED CONTROL COMPONENT
+// ============================================================================
+
+interface SegmentedControlProps {
+  activeSegment: EventSide;
+  onSegmentChange: (segment: EventSide) => void;
+}
+
+const SegmentedControl = ({ activeSegment, onSegmentChange }: SegmentedControlProps) => {
+  return (
+    <div className="flex justify-center mb-12">
+      <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-xl border border-wedding-gold-200">
+        {/* Background indicator */}
+        <motion.div
+          className="absolute top-2 bottom-2 bg-gradient-to-r from-wedding-sindoor-500 to-wedding-sindoor-600 rounded-xl shadow-lg"
+          initial={false}
+          animate={{
+            left: activeSegment === 'dulha' ? '8px' : 'calc(50% + 4px)',
+            width: 'calc(50% - 8px)',
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        />
+        
+        <div className="relative flex">
+          {/* Dulha (Groom) */}
+          <button
+            onClick={() => onSegmentChange('dulha')}
+            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
+              activeSegment === 'dulha'
+                ? 'text-white font-semibold'
+                : 'text-wedding-sindoor-700 hover:text-wedding-sindoor-800'
+            }`}
+          >
+            <img
+              src={groomIcon}
+              alt="Groom"
+              className={`w-6 h-6 mr-3 transition-all duration-300 ${
+                activeSegment === 'dulha' ? 'brightness-0 invert' : 'opacity-70'
+              }`}
+            />
+            <span className="font-['Poppins'] font-medium text-lg">Dulha</span>
+          </button>
+          
+          {/* Dulhan (Bride) */}
+          <button
+            onClick={() => onSegmentChange('dulhan')}
+            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
+              activeSegment === 'dulhan'
+                ? 'text-white font-semibold'
+                : 'text-wedding-sindoor-700 hover:text-wedding-sindoor-800'
+            }`}
+          >
+            <img
+              src={brideIcon}
+              alt="Bride"
+              className={`w-6 h-6 mr-3 transition-all duration-300 ${
+                activeSegment === 'dulhan' ? 'brightness-0 invert' : 'opacity-70'
+              }`}
+            />
+            <span className="font-['Poppins'] font-medium text-lg">Dulhan</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // COMPONENT SECTIONS
 // ============================================================================
 
-const SectionHeader = () => (
-  <div className="text-center mb-16">
-    <h2 className="text-5xl md:text-6xl font-bold text-wedding-sindoor-800 mb-8 font-['Playfair_Display']">
-      Wedding Events
-    </h2>
-    <p className="text-xl text-wedding-sindoor-700 max-w-3xl mx-auto font-['Poppins'] leading-relaxed">
-      Join us for a series of beautiful celebrations leading up to our
-      special day. Each event is a unique part of our wedding journey.
-    </p>
-  </div>
-);
+const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
+  const getTitle = () => {
+    switch (activeSegment) {
+      case 'dulha':
+        return 'Dulha Side Events';
+      case 'dulhan':
+        return 'Dulhan Side Events';
+    }
+  };
+
+  const getDescription = () => {
+    switch (activeSegment) {
+      case 'dulha':
+        return 'Celebrate with the groom\'s side of the family in these special events leading up to our big day.';
+      case 'dulhan':
+        return 'Join the bride\'s side of the family for these beautiful celebrations and traditions.';
+    }
+  };
+
+  return (
+    <div className="text-center mb-16">
+      <motion.h2 
+        key={activeSegment}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-5xl md:text-6xl font-bold text-wedding-sindoor-800 mb-8 font-['Playfair_Display']"
+      >
+        {getTitle()}
+      </motion.h2>
+      <motion.p 
+        key={`${activeSegment}-desc`}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="text-xl text-wedding-sindoor-700 max-w-3xl mx-auto font-['Poppins'] leading-relaxed"
+      >
+        {getDescription()}
+      </motion.p>
+    </div>
+  );
+};
 
 const EventCard = ({ event, index }: { event: Event; index: number }) => (
   <motion.div
@@ -219,21 +343,95 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
   </motion.div>
 );
 
-const EventsList = () => (
-  <div className="space-y-10 lg:space-y-14">
-    {EVENTS_DATA.map((event, index) => (
-      <EventCard key={index} event={event} index={index} />
-    ))}
-  </div>
-);
+const EventsList = ({ events }: { events: Event[] }) => {
+  if (events.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center py-16"
+      >
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-12 shadow-lg border border-wedding-gold-200">
+          <h3 className="text-2xl font-bold text-wedding-sindoor-700 mb-4 font-['Playfair_Display']">No Events Found</h3>
+          <p className="text-wedding-sindoor-600 font-['Poppins']">There are no events scheduled for this category yet.</p>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <div className="space-y-10 lg:space-y-14">
+      {events.map((event, index) => (
+        <EventCard key={`${event.title}-${index}`} event={event} index={index} />
+      ))}
+    </div>
+  );
+};
 
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
 
+// ============================================================================
+// FLOWER DECORATION CONFIGURATION
+// ============================================================================
+
+interface FlowerPosition {
+  id: string;
+  position: string; // Tailwind positioning classes
+  size: string; // Tailwind size classes
+  opacity: string; // Tailwind opacity classes
+  rotation: string; // Tailwind rotation classes
+  hideOnMobile?: boolean;
+}
+
+const FLOWER_LILY_POSITIONS: FlowerPosition[] = [
+  {
+    id: 'top-right',
+    position: 'top-20 -right-4 md:top-32 md:right-8',
+    size: 'w-[20%] md:w-[25%]',
+    opacity: 'opacity-80',
+    rotation: '-rotate-75'
+  },
+];
+
+// ============================================================================
+// FLOWER DECORATION COMPONENTS
+// ============================================================================
+
+const FlowerDecorations = () => {
+  return (
+    <>
+      {/* Flower Top - Top Left */}
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20 pointer-events-none max-h-full">
+        <img
+          src={flowerTop}
+          alt="Decorative flower"
+          className="w-1/2 lg:w-full max-h-full object-fill opacity-60 transform rotate-1"
+        />
+      </div>
+
+      {/* Single Flower Lily - Top Right */}
+      <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+        <img
+          src={flowerLily}
+          alt="Decorative lily"
+          className="absolute top-4 -right-4 md:top-32 md:right-8 w-[20%] sm:w-[30%] object-contain opacity-80 transform -rotate-45 transition-transform duration-300 hover:scale-110"
+        />
+      </div>
+    </>
+  );
+};
+
 export default function EventsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
+  const [activeSegment, setActiveSegment] = useState<EventSide>('dulha');
+
+  // Filter events based on active segment
+  const filteredEvents = EVENTS_DATA.filter(event => {
+    return event.side.includes(activeSegment);
+  });
 
   return (
     <>
@@ -249,6 +447,9 @@ export default function EventsSection() {
         id="events"
         className="py-24 px-4 lg:px-6 bg-gradient-to-b from-white to-wedding-gold-50/30 relative overflow-hidden"
       >
+        {/* Simplified Flower Decorations */}
+        <FlowerDecorations />
+
         {/* Background decorative elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-20 left-10 w-32 h-32 bg-wedding-gold-300 rounded-full blur-3xl" />
@@ -262,8 +463,19 @@ export default function EventsSection() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <SectionHeader />
-          <EventsList />
+          <SectionHeader activeSegment={activeSegment} />
+          <SegmentedControl 
+            activeSegment={activeSegment} 
+            onSegmentChange={setActiveSegment} 
+          />
+          <motion.div
+            key={activeSegment}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <EventsList events={filteredEvents} />
+          </motion.div>
         </motion.div>
       </section>
     </>
