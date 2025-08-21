@@ -5,11 +5,6 @@ import heroImage from "@/assets/hero.webp";
 import logoVideo from "@/assets/logo_animated.mp4";
 
 export default function HeroSection() {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section
       id="home"
