@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const navItems = [
     { name: "Home", href: "#home" },
@@ -14,6 +16,29 @@ export default function Navbar() {
     { name: "Memory Wall", href: "#memory-wall" },
   ];
 
+  useEffect(() => {
+    const controlNavbar = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show navbar when at top of page
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+      }
+      // Hide navbar when scrolling down, show when scrolling up
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+        setIsOpen(false); // Close mobile menu when hiding
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', controlNavbar);
+    return () => window.removeEventListener('scroll', controlNavbar);
+  }, [lastScrollY]);
+
   const scrollToSection = (href: string) => {
     const element = document.getElementById(href.substring(1));
     element?.scrollIntoView({ behavior: "smooth" });
@@ -21,7 +46,9 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-white/10 backdrop-blur-md z-50 border-b border-white/20">
+    <nav className={`fixed top-0 w-full bg-white/10 backdrop-blur-md z-50 border-b border-white/20 transition-transform duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
