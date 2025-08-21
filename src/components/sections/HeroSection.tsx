@@ -11,7 +11,7 @@ export default function HeroSection() {
       className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
     >
       {/* Hero Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
@@ -25,7 +25,7 @@ export default function HeroSection() {
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
       >
         <div className="space-y-6">
-          <motion.h1 
+          <motion.h1
             className="text-7xl md:text-9xl font-bold text-white mb-4 font-playfair tracking-wide"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -33,8 +33,8 @@ export default function HeroSection() {
           >
             Sandeep
           </motion.h1>
-          
-          <motion.div 
+
+          <motion.div
             className="text-3xl md:text-4xl text-white/90 font-light font-dancing"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -42,8 +42,8 @@ export default function HeroSection() {
           >
             &
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             className="text-7xl md:text-9xl font-bold text-white mb-8 font-playfair tracking-wide"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export default function HeroSection() {
           </motion.h1>
         </div>
 
-        <motion.div 
+        <motion.div
           className="mt-36 space-y-4 backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -73,7 +73,7 @@ export default function HeroSection() {
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="py-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -84,7 +84,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Elegant decorative elements */}
-      <motion.div 
+      <motion.div
         className="absolute top-1/4 left-10 text-white/20 text-8xl"
         initial={{ opacity: 0, rotate: -45 }}
         animate={{ opacity: 1, rotate: 0 }}
@@ -92,7 +92,7 @@ export default function HeroSection() {
       >
         ❀
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute bottom-1/4 right-10 text-white/20 text-8xl"
         initial={{ opacity: 0, rotate: 45 }}
         animate={{ opacity: 1, rotate: 0 }}

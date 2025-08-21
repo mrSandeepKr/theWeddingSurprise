@@ -196,7 +196,10 @@ interface CategoryFilterProps {
   onCategoryChange: (category: Category) => void;
 }
 
-function CategoryFilter({ selectedCategory, onCategoryChange }: CategoryFilterProps) {
+function CategoryFilter({
+  selectedCategory,
+  onCategoryChange,
+}: CategoryFilterProps) {
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-8">
       {CATEGORIES.map((cat) => (
@@ -341,7 +344,8 @@ function GalleryHeader() {
 
 // Main Gallery Section Component
 export default function GallerySection() {
-  const [selectedCategory, setSelectedCategory] = useState<Category>("All Photos");
+  const [selectedCategory, setSelectedCategory] =
+    useState<Category>("All Photos");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const [imageLoading, setImageLoading] = useState<Set<string>>(new Set());
@@ -351,7 +355,7 @@ export default function GallerySection() {
 
   // Autoplay plugin for continuous carousel
   const autoplay = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true })
+    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }),
   );
 
   const imagesToShow =
@@ -423,7 +427,7 @@ export default function GallerySection() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <GalleryHeader />
-          
+
           <CategoryFilter
             selectedCategory={selectedCategory}
             onCategoryChange={setSelectedCategory}

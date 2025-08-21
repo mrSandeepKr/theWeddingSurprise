@@ -19,7 +19,7 @@ export default function Navbar() {
   useEffect(() => {
     const controlNavbar = () => {
       const currentScrollY = window.scrollY;
-      
+
       // Show navbar when at top of page
       if (currentScrollY < 10) {
         setIsVisible(true);
@@ -31,12 +31,12 @@ export default function Navbar() {
       } else if (currentScrollY < lastScrollY) {
         setIsVisible(true);
       }
-      
+
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener('scroll', controlNavbar);
-    return () => window.removeEventListener('scroll', controlNavbar);
+    window.addEventListener("scroll", controlNavbar);
+    return () => window.removeEventListener("scroll", controlNavbar);
   }, [lastScrollY]);
 
   const scrollToSection = (href: string) => {
@@ -46,9 +46,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`fixed top-0 w-full bg-white/10 backdrop-blur-md z-50 border-b border-white/20 transition-transform duration-300 ${
-      isVisible ? 'translate-y-0' : '-translate-y-full'
-    }`}>
+    <nav
+      className={`fixed top-0 w-full bg-white/10 backdrop-blur-md z-50 border-b border-white/20 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">

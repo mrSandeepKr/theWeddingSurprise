@@ -83,7 +83,11 @@ function TransportationCard() {
   );
 }
 
-function TransportationOption({ title, description, details }: {
+function TransportationOption({
+  title,
+  description,
+  details,
+}: {
   title: string;
   description: string;
   details: string;
@@ -129,7 +133,11 @@ function WeatherCard() {
   );
 }
 
-function WeatherInfo({ title, description, details }: {
+function WeatherInfo({
+  title,
+  description,
+  details,
+}: {
   title: string;
   description: string;
   details: string;
@@ -161,12 +169,13 @@ function AccommodationsSection() {
   );
 }
 
-function AccommodationCard({ accommodation }: { accommodation: Accommodation }) {
+function AccommodationCard({
+  accommodation,
+}: {
+  accommodation: Accommodation;
+}) {
   const handleCallClick = () => {
-    window.open(
-      "tel:" + accommodation.contact.replace(/\D/g, ""),
-      "_blank"
-    );
+    window.open("tel:" + accommodation.contact.replace(/\D/g, ""), "_blank");
   };
 
   return (
@@ -211,13 +220,13 @@ function GiftInfoCard() {
         </div>
         <div className="space-y-4">
           <p className="text-rose-700">
-            Your presence is the greatest gift we could ask for! However,
-            if you'd like to honor us with a gift:
+            Your presence is the greatest gift we could ask for! However, if
+            you'd like to honor us with a gift:
           </p>
           <RegistryInfo />
           <p className="text-sm text-rose-600 italic">
-            Cash gifts are also gratefully accepted and will help us start
-            our new journey together.
+            Cash gifts are also gratefully accepted and will help us start our
+            new journey together.
           </p>
         </div>
       </CardContent>
@@ -227,15 +236,11 @@ function GiftInfoCard() {
 
 function RegistryInfo() {
   const registries = ["Williams Sonoma", "Target", "Amazon"];
-  
+
   return (
     <div className="bg-rose-50 p-4 rounded-lg">
-      <h4 className="font-semibold text-rose-700 mb-2">
-        Registry Information
-      </h4>
-      <p className="text-rose-600 text-sm mb-2">
-        We're registered at:
-      </p>
+      <h4 className="font-semibold text-rose-700 mb-2">Registry Information</h4>
+      <p className="text-rose-600 text-sm mb-2">We're registered at:</p>
       <ul className="text-rose-600 text-sm space-y-1">
         {registries.map((registry, index) => (
           <li key={index}>• {registry}</li>
@@ -276,7 +281,11 @@ function FoodDiningCard() {
   );
 }
 
-function DiningInfo({ title, description, additionalInfo }: {
+function DiningInfo({
+  title,
+  description,
+  additionalInfo,
+}: {
   title: string;
   description: string;
   additionalInfo?: string;
@@ -301,23 +310,20 @@ function ContactCard() {
             Need Help?
           </h3>
           <p className="text-rose-700 mb-6">
-            If you have any questions or need assistance, please don't
-            hesitate to contact us or our wedding coordinator.
+            If you have any questions or need assistance, please don't hesitate
+            to contact us or our wedding coordinator.
           </p>
           <div className="grid md:grid-cols-2 gap-6 text-center">
             <ContactInfo
               title="Couple Contact"
               contacts={[
                 "Sandeep: +1 (555) 123-0000",
-                "Payal: +1 (555) 456-0000"
+                "Payal: +1 (555) 456-0000",
               ]}
             />
             <ContactInfo
               title="Wedding Coordinator"
-              contacts={[
-                "Sarah Johnson",
-                "+1 (555) 789-0000"
-              ]}
+              contacts={["Sarah Johnson", "+1 (555) 789-0000"]}
             />
           </div>
         </CardContent>
@@ -326,7 +332,10 @@ function ContactCard() {
   );
 }
 
-function ContactInfo({ title, contacts }: {
+function ContactInfo({
+  title,
+  contacts,
+}: {
   title: string;
   contacts: string[];
 }) {
@@ -334,7 +343,9 @@ function ContactInfo({ title, contacts }: {
     <div>
       <h4 className="font-semibold text-rose-700 mb-2">{title}</h4>
       {contacts.map((contact, index) => (
-        <p key={index} className="text-rose-600">{contact}</p>
+        <p key={index} className="text-rose-600">
+          {contact}
+        </p>
       ))}
     </div>
   );
@@ -349,7 +360,7 @@ export default function GuestInfoSection() {
     >
       <div className="max-w-6xl mx-auto">
         <SectionHeader />
-        
+
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           <TransportationCard />
           <WeatherCard />

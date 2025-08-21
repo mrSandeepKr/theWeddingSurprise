@@ -1,5 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, Clock, MapPin, Palette, Music, Users, Shirt } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Palette,
+  Music,
+  Users,
+  Shirt,
+} from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import brideIcon from "@/assets/bride_icon.png";
@@ -22,10 +30,10 @@ interface Event {
   color: string;
   image?: string;
   dressCode: string;
-  side: ('dulha' | 'dulhan')[]; // Changed to array
+  side: ("dulha" | "dulhan")[]; // Changed to array
 }
 
-type EventSide = 'dulha' | 'dulhan'; // Removed 'both'
+type EventSide = "dulha" | "dulhan"; // Removed 'both'
 
 // ============================================================================
 // CONSTANTS & DATA
@@ -100,16 +108,21 @@ const EVENTS_DATA: Event[] = [
     color: "royal",
     image: "/src/assets/couple_4.webp",
     dressCode: "Formal traditional or contemporary wear",
-    side: ["dulha"], 
+    side: ["dulha"],
   },
 ];
 
 const COLOR_MAP = {
-  haldi: "border-wedding-haldi-200 bg-gradient-to-br from-wedding-haldi-50/80 to-wedding-haldi-100/60",
-  mehendi: "border-wedding-mehendi-200 bg-gradient-to-br from-wedding-mehendi-50/80 to-wedding-mehendi-100/60",
-  magenta: "border-wedding-magenta-200 bg-gradient-to-br from-wedding-magenta-50/80 to-wedding-magenta-100/60",
-  sindoor: "border-wedding-sindoor-200 bg-gradient-to-br from-wedding-sindoor-50/80 to-wedding-sindoor-100/60",
-  royal: "border-wedding-royal-200 bg-gradient-to-br from-wedding-royal-50/80 to-wedding-royal-100/60",
+  haldi:
+    "border-wedding-haldi-200 bg-gradient-to-br from-wedding-haldi-50/80 to-wedding-haldi-100/60",
+  mehendi:
+    "border-wedding-mehendi-200 bg-gradient-to-br from-wedding-mehendi-50/80 to-wedding-mehendi-100/60",
+  magenta:
+    "border-wedding-magenta-200 bg-gradient-to-br from-wedding-magenta-50/80 to-wedding-magenta-100/60",
+  sindoor:
+    "border-wedding-sindoor-200 bg-gradient-to-br from-wedding-sindoor-50/80 to-wedding-sindoor-100/60",
+  royal:
+    "border-wedding-royal-200 bg-gradient-to-br from-wedding-royal-50/80 to-wedding-royal-100/60",
 };
 
 // ============================================================================
@@ -132,7 +145,10 @@ interface SegmentedControlProps {
   onSegmentChange: (segment: EventSide) => void;
 }
 
-const SegmentedControl = ({ activeSegment, onSegmentChange }: SegmentedControlProps) => {
+const SegmentedControl = ({
+  activeSegment,
+  onSegmentChange,
+}: SegmentedControlProps) => {
   return (
     <div className="flex justify-center mb-12">
       <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-xl border border-wedding-gold-200">
@@ -141,46 +157,48 @@ const SegmentedControl = ({ activeSegment, onSegmentChange }: SegmentedControlPr
           className="absolute top-2 bottom-2 bg-gradient-to-r from-wedding-sindoor-500 to-wedding-sindoor-600 rounded-xl shadow-lg"
           initial={false}
           animate={{
-            left: activeSegment === 'dulha' ? '8px' : 'calc(50% + 4px)',
-            width: 'calc(50% - 8px)',
+            left: activeSegment === "dulha" ? "8px" : "calc(50% + 4px)",
+            width: "calc(50% - 8px)",
           }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
-        
+
         <div className="relative flex">
           {/* Dulha (Groom) */}
           <button
-            onClick={() => onSegmentChange('dulha')}
+            onClick={() => onSegmentChange("dulha")}
             className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
-              activeSegment === 'dulha'
-                ? 'text-white font-semibold'
-                : 'text-wedding-sindoor-700 hover:text-wedding-sindoor-800'
+              activeSegment === "dulha"
+                ? "text-white font-semibold"
+                : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
             }`}
           >
             <img
               src={groomIcon}
               alt="Groom"
               className={`w-6 h-6 mr-3 transition-all duration-300 ${
-                activeSegment === 'dulha' ? 'brightness-0 invert' : 'opacity-70'
+                activeSegment === "dulha" ? "brightness-0 invert" : "opacity-70"
               }`}
             />
             <span className="font-['Poppins'] font-medium text-lg">Dulha</span>
           </button>
-          
+
           {/* Dulhan (Bride) */}
           <button
-            onClick={() => onSegmentChange('dulhan')}
+            onClick={() => onSegmentChange("dulhan")}
             className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
-              activeSegment === 'dulhan'
-                ? 'text-white font-semibold'
-                : 'text-wedding-sindoor-700 hover:text-wedding-sindoor-800'
+              activeSegment === "dulhan"
+                ? "text-white font-semibold"
+                : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
             }`}
           >
             <img
               src={brideIcon}
               alt="Bride"
               className={`w-6 h-6 mr-3 transition-all duration-300 ${
-                activeSegment === 'dulhan' ? 'brightness-0 invert' : 'opacity-70'
+                activeSegment === "dulhan"
+                  ? "brightness-0 invert"
+                  : "opacity-70"
               }`}
             />
             <span className="font-['Poppins'] font-medium text-lg">Dulhan</span>
@@ -198,25 +216,25 @@ const SegmentedControl = ({ activeSegment, onSegmentChange }: SegmentedControlPr
 const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
   const getTitle = () => {
     switch (activeSegment) {
-      case 'dulha':
-        return 'Dulha Side Events';
-      case 'dulhan':
-        return 'Dulhan Side Events';
+      case "dulha":
+        return "Dulha Side Events";
+      case "dulhan":
+        return "Dulhan Side Events";
     }
   };
 
   const getDescription = () => {
     switch (activeSegment) {
-      case 'dulha':
-        return 'Celebrate with the groom\'s side of the family in these special events leading up to our big day.';
-      case 'dulhan':
-        return 'Join the bride\'s side of the family for these beautiful celebrations and traditions.';
+      case "dulha":
+        return "Celebrate with the groom's side of the family in these special events leading up to our big day.";
+      case "dulhan":
+        return "Join the bride's side of the family for these beautiful celebrations and traditions.";
     }
   };
 
   return (
     <div className="text-center mb-16">
-      <motion.h2 
+      <motion.h2
         key={activeSegment}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -225,7 +243,7 @@ const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
       >
         {getTitle()}
       </motion.h2>
-      <motion.p 
+      <motion.p
         key={`${activeSegment}-desc`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -250,7 +268,7 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
     >
       {/* Shine Effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-      
+
       <CardContent className="p-0">
         <div className="flex flex-col lg:flex-row">
           {/* Image Section */}
@@ -295,11 +313,15 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
                   <Calendar className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold test-sm sm:text-lg">{event.date}</span>
+                  <span className="font-semibold test-sm sm:text-lg">
+                    {event.date}
+                  </span>
                 </div>
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
                   <Clock className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold test-sm sm:text-lg">{event.time}</span>
+                  <span className="font-semibold test-sm sm:text-lg">
+                    {event.time}
+                  </span>
                 </div>
               </div>
 
@@ -352,8 +374,12 @@ const EventsList = ({ events }: { events: Event[] }) => {
         className="text-center py-16"
       >
         <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-12 shadow-lg border border-wedding-gold-200">
-          <h3 className="text-2xl font-bold text-wedding-sindoor-700 mb-4 font-['Playfair_Display']">No Events Found</h3>
-          <p className="text-wedding-sindoor-600 font-['Poppins']">There are no events scheduled for this category yet.</p>
+          <h3 className="text-2xl font-bold text-wedding-sindoor-700 mb-4 font-['Playfair_Display']">
+            No Events Found
+          </h3>
+          <p className="text-wedding-sindoor-600 font-['Poppins']">
+            There are no events scheduled for this category yet.
+          </p>
         </div>
       </motion.div>
     );
@@ -362,7 +388,11 @@ const EventsList = ({ events }: { events: Event[] }) => {
   return (
     <div className="space-y-10 lg:space-y-14">
       {events.map((event, index) => (
-        <EventCard key={`${event.title}-${index}`} event={event} index={index} />
+        <EventCard
+          key={`${event.title}-${index}`}
+          event={event}
+          index={index}
+        />
       ))}
     </div>
   );
@@ -387,11 +417,11 @@ interface FlowerPosition {
 
 const FLOWER_LILY_POSITIONS: FlowerPosition[] = [
   {
-    id: 'top-right',
-    position: 'top-20 -right-4 md:top-32 md:right-8',
-    size: 'w-[20%] md:w-[25%]',
-    opacity: 'opacity-80',
-    rotation: '-rotate-75'
+    id: "top-right",
+    position: "top-20 -right-4 md:top-32 md:right-8",
+    size: "w-[20%] md:w-[25%]",
+    opacity: "opacity-80",
+    rotation: "-rotate-75",
   },
 ];
 
@@ -426,10 +456,10 @@ const FlowerDecorations = () => {
 export default function EventsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
-  const [activeSegment, setActiveSegment] = useState<EventSide>('dulha');
+  const [activeSegment, setActiveSegment] = useState<EventSide>("dulha");
 
   // Filter events based on active segment
-  const filteredEvents = EVENTS_DATA.filter(event => {
+  const filteredEvents = EVENTS_DATA.filter((event) => {
     return event.side.includes(activeSegment);
   });
 
@@ -437,12 +467,16 @@ export default function EventsSection() {
     <>
       {/* Google Fonts */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
       <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
       />
-      
+
       <section
         id="events"
         className="py-24 px-4 lg:px-6 bg-gradient-to-b from-white to-wedding-gold-50/30 relative overflow-hidden"
@@ -455,7 +489,7 @@ export default function EventsSection() {
           <div className="absolute top-20 left-10 w-32 h-32 bg-wedding-gold-300 rounded-full blur-3xl" />
           <div className="absolute bottom-20 right-10 w-40 h-40 bg-wedding-sindoor-300 rounded-full blur-3xl" />
         </div>
-        
+
         <motion.div
           ref={ref}
           className="max-w-7xl mx-auto relative z-10"
@@ -464,9 +498,9 @@ export default function EventsSection() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <SectionHeader activeSegment={activeSegment} />
-          <SegmentedControl 
-            activeSegment={activeSegment} 
-            onSegmentChange={setActiveSegment} 
+          <SegmentedControl
+            activeSegment={activeSegment}
+            onSegmentChange={setActiveSegment}
           />
           <motion.div
             key={activeSegment}
