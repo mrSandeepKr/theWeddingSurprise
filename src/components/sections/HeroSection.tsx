@@ -19,7 +19,7 @@ export default function HeroSection() {
       </div>
 
       <motion.div
-        className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-16"
+        className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-32"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}

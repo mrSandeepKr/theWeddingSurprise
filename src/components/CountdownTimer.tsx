@@ -1,54 +1,57 @@
-import { useState, useEffect } from "react";
-
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown';
+import '@leenguyen/react-flip-clock-countdown/dist/index.css';
 
 export default function CountdownTimer() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  useEffect(() => {
-    const weddingDate = new Date("2026-02-05T00:00:00").getTime();
-
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = weddingDate - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor(
-            (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-          ),
-          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((difference % (1000 * 60)) / 1000),
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const weddingDate = new Date("2026-02-05T00:00:00").getTime();
 
   return (
-    <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
-      {Object.entries(timeLeft).map(([unit, value]) => (
-        <div key={unit} className="text-center">
-          <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg">
-            <div className="text-2xl md:text-3xl font-bold text-rose-800">
-              {value.toString().padStart(2, "0")}
+    <div className="flex justify-center items-center w-full overflow-hidden">
+      <div className="w-full">
+        <FlipClockCountdown
+          to={weddingDate}
+          labels={['DAYS', 'HOURS', 'MINS', 'SECS']}
+          labelStyle={{
+            fontSize: 'clamp(8px, 2vw, 18px)',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            color: '#be185d',
+            letterSpacing: '0.02em'
+          }}
+          digitBlockStyle={{
+            width: 'clamp(28px, 8vw, 70px)',
+            height: 'clamp(40px, 12vw, 90px)',
+            fontSize: 'clamp(24px, 4.5vw, 42px)',
+            fontWeight: 'bold',
+            color: 'white',
+            background: 'linear-gradient(135deg, #be185d 0%, #9f1239 100%)',
+            borderRadius: '4px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+          }}
+          dividerStyle={{
+            color: '#be185d',
+            height: 1
+          }}
+          separatorStyle={{
+            color: '#be185d',
+            size: 'clamp(3px, 1.5vw, 8px)'
+          }}
+          duration={0.8}
+          className="flip-clock-wedding"
+          spacing={{
+            clock: 'clamp(4px, 2vw, 18px)',
+            digitBlock: 'clamp(1px, 0.5vw, 4px)'
+          }}
+        >
+          <div className="text-center p-3 sm:p-4 md:p-6">
+            <div className="text-base sm:text-lg md:text-xl font-bold text-rose-800 mb-1 sm:mb-2">
+              🎉 The Big Day is Here! 🎉
             </div>
-            <div className="text-sm text-rose-600 capitalize">{unit}</div>
+            <div className="text-xs sm:text-sm md:text-base text-rose-600">
+              Time to celebrate our love!
+            </div>
           </div>
-        </div>
-      ))}
+        </FlipClockCountdown>
+      </div>
     </div>
   );
 }
