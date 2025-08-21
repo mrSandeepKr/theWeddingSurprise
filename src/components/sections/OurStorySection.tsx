@@ -52,7 +52,7 @@ export default function OurStorySection() {
       >
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
-            Our Love Story
+            Our Story
           </h2>
           <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
             Every love story is beautiful, but ours is our favorite. Here's how

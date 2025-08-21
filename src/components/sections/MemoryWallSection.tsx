@@ -77,10 +77,10 @@ export default function MemoryWallSection() {
     <section id="memory-wall" className="py-20 px-6 bg-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-serif">
+          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
             Memory Wall
           </h2>
-          <p className="text-lg text-rose-700 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-rose-700 max-w-2xl mx-auto mb-8 font-crimson">
             Share your wishes, memories, and blessings for Sandeep and Payal.
             Your messages mean the world to us!
           </p>

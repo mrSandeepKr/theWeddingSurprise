@@ -3,7 +3,6 @@ import HeroSection from "@/components/sections/HeroSection";
 import OurStorySection from "@/components/sections/OurStorySection";
 import EventsSection from "@/components/sections/EventsSection";
 import GallerySection from "@/components/sections/GallerySection";
-import GuestInfoSection from "@/components/sections/GuestInfoSection";
 import MemoryWallSection from "@/components/sections/MemoryWallSection";
 import { Heart } from "lucide-react";
 
@@ -15,7 +14,6 @@ export default function WeddingInvitation() {
       <OurStorySection />
       <EventsSection />
       <GallerySection />
-      <GuestInfoSection />
       <MemoryWallSection />
 
       {/* Footer */}

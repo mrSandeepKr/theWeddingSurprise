@@ -48,7 +48,7 @@ const EVENTS_DATA: Event[] = [
     address: "456 Mehendi Lane, City, State",
     description:
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
-    icon: <Palette className="h-8 w-8 text-wedding-mehendi-600" />,
+    icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-mehendi-600" />,
     color: "mehendi",
     image: "/src/assets/couple_5.webp",
     dressCode: "Bright traditional colors, comfortable for sitting",
@@ -76,7 +76,7 @@ const EVENTS_DATA: Event[] = [
     address: "789 Dance Floor Road, City, State",
     description:
       "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories.",
-    icon: <Music className="h-8 w-8 text-wedding-magenta-600" />,
+    icon: <Music className="h-4 w-4 md:h-8 md:w-8 text-wedding-magenta-600" />,
     color: "magenta",
     image: "/src/assets/couple_2.webp",
     dressCode: "Festive attire, ready to dance!",
@@ -90,7 +90,7 @@ const EVENTS_DATA: Event[] = [
     address: "123 Wedding Avenue, City, State",
     description:
       "The sacred ceremony where we exchange vows and begin our journey as one. Witness the union of two hearts in the presence of family and friends.",
-    icon: <Calendar className="h-8 w-8 text-wedding-sindoor-600" />,
+    icon: <Calendar className="h-4 w-4 md:h-8 md:w-8 text-wedding-sindoor-600" />,
     color: "sindoor",
     image: "/src/assets/couple_3.webp",
     dressCode: "Formal traditional or contemporary wear",
@@ -104,7 +104,7 @@ const EVENTS_DATA: Event[] = [
     address: "123 Wedding Avenue, City, State",
     description:
       "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration.",
-    icon: <Users className="h-8 w-8 text-wedding-royal-600" />,
+    icon: <Users className="h-4 w-4 md:h-8 md:w-8 text-wedding-royal-600" />,
     color: "royal",
     image: "/src/assets/couple_4.webp",
     dressCode: "Formal traditional or contemporary wear",
@@ -134,6 +134,30 @@ const getColorClasses = (color: string): string => {
     COLOR_MAP[color as keyof typeof COLOR_MAP] ||
     "border-wedding-sindoor-200 bg-gradient-to-br from-wedding-sindoor-50/80 to-wedding-sindoor-100/60"
   );
+};
+
+// Add this new function after the getColorClasses function
+const getBorderColorClasses = (color: string): string => {
+  const borderColorMap = {
+    haldi: "border-wedding-haldi-300",
+    mehendi: "border-wedding-mehendi-300", 
+    magenta: "border-wedding-magenta-300",
+    sindoor: "border-wedding-sindoor-300",
+    royal: "border-wedding-royal-300",
+  };
+  return borderColorMap[color as keyof typeof borderColorMap] || "border-wedding-sindoor-300";
+};
+
+// Add this new function after the getColorClasses function
+const getIconColorClasses = (color: string): string => {
+  const iconColorMap = {
+    haldi: "text-wedding-haldi-700",
+    mehendi: "text-wedding-mehendi-700", 
+    magenta: "text-wedding-magenta-700",
+    sindoor: "text-wedding-sindoor-700",
+    royal: "text-wedding-royal-700",
+  };
+  return iconColorMap[color as keyof typeof iconColorMap] || "text-wedding-sindoor-700";
 };
 
 // ============================================================================
@@ -239,7 +263,7 @@ const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-5xl md:text-6xl font-bold text-wedding-sindoor-800 mb-8 font-['Playfair_Display']"
+        className="text-4xl md:text-5xl font-bold text-wedding-sindoor-800 mb-8 font-playfair"
       >
         {getTitle()}
       </motion.h2>
@@ -248,7 +272,7 @@ const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="text-xl text-wedding-sindoor-700 max-w-3xl mx-auto font-['Poppins'] leading-relaxed"
+        className="text-lg text-wedding-sindoor-700 max-w-3xl mx-auto font-crimson leading-relaxed"
       >
         {getDescription()}
       </motion.p>
@@ -292,68 +316,70 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
             </div>
           </div>
 
-          {/* Content Section */}
-          <div className="lg:w-2/3 p-8 lg:p-10 flex flex-col justify-between">
-            <div className="space-y-6">
-              {/* Header */}
-              <div className="flex items-start justify-between flex-wrap gap-4">
-                <div className="flex items-center space-x-5">
-                  <div className="flex-shrink-0 p-4 bg-white/90 rounded-full shadow-lg border-2 border-wedding-gold-200 backdrop-blur-sm">
-                    {event.icon}
+          {/* Content Section - Made more compact for mobile */}
+          <div className="lg:w-2/3 p-4 sm:p-6 lg:p-10 flex flex-col justify-between">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+              {/* Header - Updated border with dynamic color */}
+              <div className="flex items-start justify-between flex-wrap gap-2 sm:gap-4">
+                <div className="flex items-center space-x-3 sm:space-x-5">
+                  <div className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 bg-white/90 rounded-full shadow-lg border-2 ${getBorderColorClasses(event.color)} backdrop-blur-sm ${getIconColorClasses(event.color)}`}>
+                    <div className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8">
+                      {event.icon}
+                    </div>
                   </div>
                   <div>
-                    <h3 className="text-xl sm:text-3xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
+                    <h3 className="text-lg sm:text-2xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
                       {event.title}
                     </h3>
                   </div>
                 </div>
               </div>
 
-              {/* Event Details */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-                <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
-                  <Calendar className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold test-sm sm:text-lg">
+              {/* Event Details - Updated icons with dynamic colors */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
+                <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
+                  <Calendar className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`} />
+                  <span className="font-semibold text-xs sm:text-sm lg:text-lg">
                     {event.date}
                   </span>
                 </div>
-                <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
-                  <Clock className="h-6 w-6 mr-4 text-wedding-marigold-600 flex-shrink-0" />
-                  <span className="font-semibold test-sm sm:text-lg">
+                <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
+                  <Clock className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`} />
+                  <span className="font-semibold text-xs sm:text-sm lg:text-lg">
                     {event.time}
                   </span>
                 </div>
               </div>
 
-              {/* Venue */}
-              <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm">
-                <MapPin className="h-6 w-6 mr-4 mt-1 flex-shrink-0 text-wedding-marigold-600" />
+              {/* Venue - Updated icon with dynamic color */}
+              <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
+                <MapPin className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`} />
                 <div>
-                  <div className="font-bold font-['Poppins'] text-gray-800 test-sm sm:text-lg">
+                  <div className="font-bold font-['Poppins'] text-gray-800 text-xs sm:text-sm lg:text-lg">
                     {event.venue}
                   </div>
-                  <div className="text-sm sm:test-sm text-gray-600 font-['Poppins'] mt-1">
+                  <div className="text-xs sm:text-sm text-gray-600 font-['Poppins'] mt-0.5 sm:mt-1">
                     {event.address}
                   </div>
                 </div>
               </div>
 
-              {/* Dress Code */}
-              <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-4 backdrop-blur-sm shadow-sm border border-wedding-gold-200">
-                <Shirt className="h-6 w-6 mr-4 mt-1 flex-shrink-0 text-wedding-sindoor-600" />
+              {/* Dress Code - Updated border and icon with dynamic colors */}
+              <div className={`flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm border ${getBorderColorClasses(event.color)}`}>
+                <Shirt className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`} />
                 <div>
-                  <div className="font-bold font-['Poppins'] text-wedding-sindoor-800 test-sm sm:text-lg mb-1">
+                  <div className={`font-bold font-['Poppins'] ${getIconColorClasses(event.color)} text-xs sm:text-sm lg:text-lg mb-0.5 sm:mb-1`}>
                     Dress Code
                   </div>
-                  <div className="text-sm sm:test-sm text-gray-700 font-['Poppins']">
+                  <div className="text-xs sm:text-sm text-gray-700 font-['Poppins']">
                     {event.dressCode}
                   </div>
                 </div>
               </div>
 
-              {/* Description */}
-              <div className="bg-white/40 rounded-xl p-3 backdrop-blur-sm shadow-sm">
-                <p className="text-gray-700 leading-relaxed font-['Poppins'] text-sm md:text-lg">
+              {/* Description - Reduced padding and font size */}
+              <div className="bg-white/40 rounded-xl p-2.5 sm:p-3 backdrop-blur-sm shadow-sm">
+                <p className="text-gray-700 leading-relaxed font-['Poppins'] text-xs sm:text-sm lg:text-lg">
                   {event.description}
                 </p>
               </div>

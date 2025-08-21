@@ -119,7 +119,7 @@ function ErrorPlaceholder() {
 // Hover Overlay Component
 function HoverOverlay() {
   return (
-    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+    <div className="absolute inset-0 bg-red-100 bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
       <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <span className="text-sm font-medium">Click to enlarge</span>
       </div>
@@ -150,7 +150,7 @@ function GalleryItem({
   onImageError,
 }: GalleryItemProps) {
   return (
-    <CarouselItem className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+    <CarouselItem className="rounded-2xl pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
       <motion.div
         className="p-1"
         initial={{ opacity: 0, scale: 0.8 }}
@@ -209,8 +209,8 @@ function CategoryFilter({
           onClick={() => onCategoryChange(cat)}
           className={`${
             selectedCategory === cat
-              ? "bg-rose-600 hover:bg-rose-700 text-white"
-              : "border-rose-600 text-rose-600 hover:bg-rose-50"
+              ? "bg-wedding-sindoor-700 hover:bg-rose-700 text-white md:h-14 rounded-md md:px-8 text-base"
+              : "border-rose-600 text-rose-600 hover:bg-rose-50 md:h-14 rounded-md md:px-8 text-base"
           }`}
         >
           {cat}
@@ -332,10 +332,10 @@ function ImageModal({ selectedImage, onClose }: ImageModalProps) {
 function GalleryHeader() {
   return (
     <div className="text-center mb-10">
-      <h2 className="text-3xl md:text-4xl font-bold text-rose-800 font-playfair">
+      <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
         Gallery
       </h2>
-      <p className="text-rose-700 mt-3">
+      <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
         Browse moments from US, Pre-Wedding, and Family celebrations.
       </p>
     </div>
