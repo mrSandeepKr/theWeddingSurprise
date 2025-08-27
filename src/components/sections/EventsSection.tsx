@@ -53,7 +53,9 @@ const EVENTS_DATA: Event[] = [
     address: "456 Mehendi Lane, City, State",
     description:
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
-    icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-mehendi-600" />,
+    icon: (
+      <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-mehendi-600" />
+    ),
     color: "mehendi",
     image: couple5,
     dressCode: "Bright traditional colors, comfortable for sitting",
@@ -95,7 +97,9 @@ const EVENTS_DATA: Event[] = [
     address: "123 Wedding Avenue, City, State",
     description:
       "The sacred ceremony where we exchange vows and begin our journey as one. Witness the union of two hearts in the presence of family and friends.",
-    icon: <Calendar className="h-4 w-4 md:h-8 md:w-8 text-wedding-sindoor-600" />,
+    icon: (
+      <Calendar className="h-4 w-4 md:h-8 md:w-8 text-wedding-sindoor-600" />
+    ),
     color: "sindoor",
     image: couple3,
     dressCode: "Formal traditional or contemporary wear",
@@ -145,24 +149,30 @@ const getColorClasses = (color: string): string => {
 const getBorderColorClasses = (color: string): string => {
   const borderColorMap = {
     haldi: "border-wedding-haldi-300",
-    mehendi: "border-wedding-mehendi-300", 
+    mehendi: "border-wedding-mehendi-300",
     magenta: "border-wedding-magenta-300",
     sindoor: "border-wedding-sindoor-300",
     royal: "border-wedding-royal-300",
   };
-  return borderColorMap[color as keyof typeof borderColorMap] || "border-wedding-sindoor-300";
+  return (
+    borderColorMap[color as keyof typeof borderColorMap] ||
+    "border-wedding-sindoor-300"
+  );
 };
 
 // Add this new function after the getColorClasses function
 const getIconColorClasses = (color: string): string => {
   const iconColorMap = {
     haldi: "text-wedding-haldi-700",
-    mehendi: "text-wedding-mehendi-700", 
+    mehendi: "text-wedding-mehendi-700",
     magenta: "text-wedding-magenta-700",
     sindoor: "text-wedding-sindoor-700",
     royal: "text-wedding-royal-700",
   };
-  return iconColorMap[color as keyof typeof iconColorMap] || "text-wedding-sindoor-700";
+  return (
+    iconColorMap[color as keyof typeof iconColorMap] ||
+    "text-wedding-sindoor-700"
+  );
 };
 
 // ============================================================================
@@ -327,7 +337,9 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               {/* Header - Updated border with dynamic color */}
               <div className="flex items-start justify-between flex-wrap gap-2 sm:gap-4">
                 <div className="flex items-center space-x-3 sm:space-x-5">
-                  <div className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 bg-white/90 rounded-full shadow-lg border-2 ${getBorderColorClasses(event.color)} backdrop-blur-sm ${getIconColorClasses(event.color)}`}>
+                  <div
+                    className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 bg-white/90 rounded-full shadow-lg border-2 ${getBorderColorClasses(event.color)} backdrop-blur-sm ${getIconColorClasses(event.color)}`}
+                  >
                     <div className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8">
                       {event.icon}
                     </div>
@@ -343,13 +355,17 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               {/* Event Details - Updated icons with dynamic colors */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
-                  <Calendar className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`} />
+                  <Calendar
+                    className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`}
+                  />
                   <span className="font-semibold text-xs sm:text-sm lg:text-lg">
                     {event.date}
                   </span>
                 </div>
                 <div className="flex items-center text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
-                  <Clock className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`} />
+                  <Clock
+                    className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 ${getIconColorClasses(event.color)} flex-shrink-0`}
+                  />
                   <span className="font-semibold text-xs sm:text-sm lg:text-lg">
                     {event.time}
                   </span>
@@ -358,7 +374,9 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
 
               {/* Venue - Updated icon with dynamic color */}
               <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
-                <MapPin className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`} />
+                <MapPin
+                  className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`}
+                />
                 <div>
                   <div className="font-bold font-['Poppins'] text-gray-800 text-xs sm:text-sm lg:text-lg">
                     {event.venue}
@@ -370,10 +388,16 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               </div>
 
               {/* Dress Code - Updated border and icon with dynamic colors */}
-              <div className={`flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm border ${getBorderColorClasses(event.color)}`}>
-                <Shirt className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`} />
+              <div
+                className={`flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm border ${getBorderColorClasses(event.color)}`}
+              >
+                <Shirt
+                  className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`}
+                />
                 <div>
-                  <div className={`font-bold font-['Poppins'] ${getIconColorClasses(event.color)} text-xs sm:text-sm lg:text-lg mb-0.5 sm:mb-1`}>
+                  <div
+                    className={`font-bold font-['Poppins'] ${getIconColorClasses(event.color)} text-xs sm:text-sm lg:text-lg mb-0.5 sm:mb-1`}
+                  >
                     Dress Code
                   </div>
                   <div className="text-xs sm:text-sm text-gray-700 font-['Poppins']">

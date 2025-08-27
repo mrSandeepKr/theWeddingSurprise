@@ -24,7 +24,7 @@ export default function HeroSection() {
         await preloadImage(heroImage);
         setHeroImageLoaded(true);
       } catch (error) {
-        console.warn('Failed to preload hero assets:', error);
+        console.warn("Failed to preload hero assets:", error);
         setHeroImageLoaded(true); // Fallback
       }
     };
@@ -106,7 +106,11 @@ export default function HeroSection() {
             <Button
               size="lg"
               className="bg-rose-600 hover:bg-rose-700 text-white px-3 md:px-8 py-2 md:py-4 text-base md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document
+                  .getElementById("story")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Our Story
             </Button>
@@ -114,7 +118,11 @@ export default function HeroSection() {
               size="lg"
               variant="outline"
               className="border-white hover:bg-white text-rose-900 hover:text-rose-600 px-3 md:px-8 py-2 md:py-4 text-base md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() =>
+                document
+                  .getElementById("events")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               View Events
             </Button>

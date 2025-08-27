@@ -13,14 +13,14 @@ import Autoplay from "embla-carousel-autoplay";
 
 // Dynamic image loading function
 const loadImage = (imageName: string) => {
-  return import(`@/assets/${imageName}.webp`).then(module => module.default);
+  return import(`@/assets/${imageName}.webp`).then((module) => module.default);
 };
 
 // Image metadata for dynamic loading
 const IMAGE_METADATA = {
   couple: Array.from({ length: 24 }, (_, i) => `couple_${i + 1}`),
   family: Array.from({ length: 7 }, (_, i) => `family_${i + 1}`),
-  preWedding: ['pre_wedding_1', 'pre_wedding_2']
+  preWedding: ["pre_wedding_1", "pre_wedding_2"],
 };
 
 interface MasterImage {
@@ -30,8 +30,8 @@ interface MasterImage {
 }
 
 // Lazy load gallery components
-const LazyGalleryCarousel = lazy(() => import('./GalleryCarousel'));
-const LazyImageModal = lazy(() => import('./ImageModal'));
+const LazyGalleryCarousel = lazy(() => import("./GalleryCarousel"));
+const LazyImageModal = lazy(() => import("./ImageModal"));
 
 // Loading Spinner Component
 function LoadingSpinner() {
@@ -75,66 +75,16 @@ interface GalleryItemProps {
   onImageError: (imageSrc: string) => void;
 }
 
-function GalleryItem({
-  item,
-  idx,
-  isLoading,
-  hasError,
-  onImageClick,
-  onImageLoadStart,
-  onImageLoad,
-  onImageError,
-}: GalleryItemProps) {
-  return (
-    <CarouselItem className="rounded-2xl pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-      <motion.div
-        className="p-1"
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.5 }}
-        whileHover={{ scale: 1.05 }}
-      >
-        <div
-          className="relative flex h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] items-center justify-center rounded-2xl shadow-sm cursor-pointer overflow-hidden group"
-          onClick={() => !hasError && onImageClick(item.image)}
-        >
-          {isLoading && <LoadingSpinner />}
-
-          {hasError ? (
-            <ErrorPlaceholder />
-          ) : (
-            <img
-              src={item.image}
-              alt={`${item.category} ${idx + 1}`}
-              className="w-full object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110"
-              loading="lazy"
-              decoding="async"
-              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              onLoadStart={() => onImageLoadStart(item.image)}
-              onLoad={() => onImageLoad(item.image)}
-              onError={() => onImageError(item.image)}
-              style={{
-                opacity: isLoading ? 0 : 1,
-                transition: "opacity 0.3s ease-in-out",
-              }}
-            />
-          )}
-
-          {!hasError && <HoverOverlay />}
-        </div>
-      </motion.div>
-    </CarouselItem>
-  );
-}
-
 // Category Filter Component
 interface CategoryFilterProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
 }
 
-function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFilterProps) {
+function CategoryFilter({
+  activeCategory,
+  onCategoryChange,
+}: CategoryFilterProps) {
   const categories = [
     { key: "all", label: "All Photos", emoji: "💕" },
     { key: "couple", label: "Couple", emoji: "👫" },
@@ -193,16 +143,16 @@ export default function GallerySection() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState<Set<string>>(new Set());
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
-  const [loadedImages, setLoadedImages] = useState<Map<string, string>>(new Map());
-  
-  const autoplay = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+  const [loadedImages, setLoadedImages] = useState<Map<string, string>>(
+    new Map(),
   );
+
+  const autoplay = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
 
   // Dynamically create master images with lazy loading
   const masterImages = useMemo(() => {
     const images: MasterImage[] = [];
-    
+
     Object.entries(IMAGE_METADATA).forEach(([category, imageNames]) => {
       imageNames.forEach((imageName) => {
         const imageUrl = loadedImages.get(imageName);
@@ -210,47 +160,48 @@ export default function GallerySection() {
           images.push({
             image: imageUrl,
             category: category as "couple" | "family" | "preWedding",
-            loaded: true
+            loaded: true,
           });
         } else {
           // Placeholder for unloaded images
           images.push({
-            image: '', // Will be loaded dynamically
+            image: "", // Will be loaded dynamically
             category: category as "couple" | "family" | "preWedding",
-            loaded: false
+            loaded: false,
           });
         }
       });
     });
-    
+
     return images;
   }, [loadedImages]);
 
   // Load images dynamically when component mounts
   useEffect(() => {
     const loadImagesAsync = async () => {
-      const imagePromises = Object.entries(IMAGE_METADATA).flatMap(([category, imageNames]) =>
-        imageNames.map(async (imageName) => {
-          try {
-            const imageUrl = await loadImage(imageName);
-            return { imageName, imageUrl };
-          } catch (error) {
-            console.warn(`Failed to load image: ${imageName}`);
-            return null;
-          }
-        })
+      const imagePromises = Object.entries(IMAGE_METADATA).flatMap(
+        ([category, imageNames]) =>
+          imageNames.map(async (imageName) => {
+            try {
+              const imageUrl = await loadImage(imageName);
+              return { imageName, imageUrl };
+            } catch (error) {
+              console.warn(`Failed to load image: ${imageName}`);
+              return null;
+            }
+          }),
       );
 
       const results = await Promise.allSettled(imagePromises);
       const newLoadedImages = new Map();
-      
+
       results.forEach((result) => {
-        if (result.status === 'fulfilled' && result.value) {
+        if (result.status === "fulfilled" && result.value) {
           const { imageName, imageUrl } = result.value;
           newLoadedImages.set(imageName, imageUrl);
         }
       });
-      
+
       setLoadedImages(newLoadedImages);
     };
 
@@ -319,7 +270,7 @@ export default function GallerySection() {
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
-        
+
         <Suspense fallback={<LoadingSpinner />}>
           <LazyGalleryCarousel
             images={filteredImages}
