@@ -173,6 +173,8 @@ function GalleryItem({
               alt={`${item.category} ${idx + 1}`}
               className="w-full object-contain rounded-2xl transition-transform duration-300 group-hover:scale-110"
               loading="lazy"
+              decoding="async"
+              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               onLoadStart={() => onImageLoadStart(item.image)}
               onLoad={() => onImageLoad(item.image)}
               onError={() => onImageError(item.image)}

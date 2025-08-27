@@ -1,21 +1,30 @@
+import { Suspense, lazy } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
-import OurStorySection from "@/components/sections/OurStorySection";
-import EventsSection from "@/components/sections/EventsSection";
-import GallerySection from "@/components/sections/GallerySection";
-import MemoryWallSection from "@/components/sections/MemoryWallSection";
 import { Heart } from "lucide-react";
+
+const OurStorySection = lazy(() => import("@/components/sections/OurStorySection"));
+const EventsSection = lazy(() => import("@/components/sections/EventsSection"));
+const GallerySection = lazy(() => import("@/components/sections/GallerySection"));
+const MemoryWallSection = lazy(() => import("@/components/sections/MemoryWallSection"));
 
 export default function WeddingInvitation() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50">
       <Navbar />
       <HeroSection />
-      <OurStorySection />
-      <EventsSection />
-      <GallerySection />
-      <MemoryWallSection />
-
+      <Suspense fallback={<div className="h-24" aria-busy="true" />}>
+        <OurStorySection />
+      </Suspense>
+      <Suspense fallback={<div className="h-24" aria-busy="true" />}>
+        <EventsSection />
+      </Suspense>
+      <Suspense fallback={<div className="h-24" aria-busy="true" />}>
+        <GallerySection />
+      </Suspense>
+      <Suspense fallback={<div className="h-24" aria-busy="true" />}>
+        <MemoryWallSection />
+      </Suspense>
       {/* Footer */}
       <footer className="py-12 text-center bg-rose-800 text-rose-100">
         <div className="space-y-4">
