@@ -43,8 +43,8 @@ function ErrorPlaceholder() {
 
 function HoverOverlay() {
   return (
-    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-center justify-center">
-      <div className="text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-lg">
+    <div className="absolute inset-0 bg-red-200 bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+      <div className="text-white opacity-0 group-hover:opacity-100 text-lg font-semibold bg-black/50 px-4 py-2 rounded-lg">
         View Image
       </div>
     </div>

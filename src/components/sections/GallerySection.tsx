@@ -1,14 +1,6 @@
 import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { motion, useInView } from "framer-motion";
-import { X } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
 // Dynamic image loading function
@@ -42,39 +34,6 @@ function LoadingSpinner() {
   );
 }
 
-// Error Placeholder Component
-function ErrorPlaceholder() {
-  return (
-    <div className="flex flex-col items-center justify-center text-rose-400 p-4">
-      <div className="text-4xl mb-2">📷</div>
-      <p className="text-sm text-center">Image not available</p>
-    </div>
-  );
-}
-
-// Hover Overlay Component
-function HoverOverlay() {
-  return (
-    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-center justify-center">
-      <div className="text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-lg">
-        View Image
-      </div>
-    </div>
-  );
-}
-
-// Gallery Item Props
-interface GalleryItemProps {
-  item: MasterImage;
-  idx: number;
-  isLoading: boolean;
-  hasError: boolean;
-  onImageClick: (imageSrc: string) => void;
-  onImageLoadStart: (imageSrc: string) => void;
-  onImageLoad: (imageSrc: string) => void;
-  onImageError: (imageSrc: string) => void;
-}
-
 // Category Filter Component
 interface CategoryFilterProps {
   activeCategory: string;
@@ -101,8 +60,8 @@ function CategoryFilter({
           onClick={() => onCategoryChange(category.key)}
           className={`px-6 py-3 rounded-full transition-all duration-300 ${
             activeCategory === category.key
-              ? "bg-rose-600 text-white shadow-lg scale-105"
-              : "bg-white/80 text-rose-700 hover:bg-rose-100 border-rose-200"
+              ? "bg-wedding-sindoor-700 hover:bg-rose-700 text-white md:h-14 rounded-xl md:px-8 text-base"
+              : "border-rose-600 text-rose-600 hover:bg-rose-50 md:h-14 rounded-xl md:px-8 text-base"
           }`}
         >
           <span className="mr-2">{category.emoji}</span>
@@ -264,7 +223,7 @@ export default function GallerySection() {
       id="gallery"
       className="py-20 px-6 bg-gradient-to-br from-orange-50 to-rose-50"
     >
-      <div className="max-w-full mx-auto">
+      <div className="max-w-full mx-auto md:px-10">
         <GalleryHeader />
         <CategoryFilter
           activeCategory={activeCategory}

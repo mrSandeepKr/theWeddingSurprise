@@ -72,7 +72,7 @@ export default function WeddingInvitation() {
           <Heart className="h-8 w-8 mx-auto text-rose-300" />
           <p className="text-lg">Looking forward to celebrating with you!</p>
           <p className="text-sm opacity-75">
-            Sandeep & Payal • December 21, 2024
+            Sandeep & Payal • February 5th, 2026
           </p>
           <div className="text-xs opacity-60 mt-4">
             <p>Made with ❤️ for our special day</p>

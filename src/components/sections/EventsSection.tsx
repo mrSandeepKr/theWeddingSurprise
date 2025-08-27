@@ -50,7 +50,7 @@ const EVENTS_DATA: Event[] = [
     date: "February 3, 2026",
     time: "2:00 PM - 6:00 PM",
     venue: "Bride's Family Home",
-    address: "456 Mehendi Lane, City, State",
+    address: "Some place, Jamshedpur",
     description:
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
     icon: (
@@ -64,9 +64,9 @@ const EVENTS_DATA: Event[] = [
   {
     title: "Haldi Ceremony",
     date: "February 4, 2026",
-    time: "10:00 AM - 12:00 AM",
-    venue: "Family Home - Garden Area",
-    address: "123 Family Street, City, State",
+    time: "12:00 AM - 2:00 PM",
+    venue: "Pool Side, Hill View Resort, Jamshedpur",
+    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
       "Join us for the traditional Haldi ceremony filled with turmeric, laughter, and blessings. This sacred ritual marks the beginning of our wedding celebrations.",
     icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-haldi-600" />,
@@ -77,10 +77,10 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Sangeet Night",
-    date: "December 20, 2024",
+    date: "February 4, 2026",
     time: "7:00 PM - 11:00 PM",
-    venue: "Royal Palace Hotel",
-    address: "789 Dance Floor Road, City, State",
+    venue: "Pool Side, Hill View Resort, Jamshedpur",
+    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
       "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories.",
     icon: <Music className="h-4 w-4 md:h-8 md:w-8 text-wedding-magenta-600" />,
@@ -91,10 +91,10 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Wedding Ceremony",
-    date: "December 21, 2024",
-    time: "4:00 PM - 7:00 PM",
-    venue: "Grand Celebration Hall",
-    address: "123 Wedding Avenue, City, State",
+    date: "February 5, 2026",
+    time: "7:00 PM - 12:00 AM",
+    venue: "Pool Side, Hill View Resort, Jamshedpur",
+    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
       "The sacred ceremony where we exchange vows and begin our journey as one. Witness the union of two hearts in the presence of family and friends.",
     icon: (
@@ -107,10 +107,10 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Reception Dinner",
-    date: "December 21, 2024",
-    time: "8:00 PM - 12:00 AM",
+    date: "February 7, 2026",
+    time: "7:00 PM - 12:00 AM",
     venue: "Grand Celebration Hall",
-    address: "123 Wedding Avenue, City, State",
+    address: "Community Hall, Mecon Colony, Ranchi, Jharkhand",
     description:
       "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration.",
     icon: <Users className="h-4 w-4 md:h-8 md:w-8 text-wedding-royal-600" />,
