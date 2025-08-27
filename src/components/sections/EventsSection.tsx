@@ -14,6 +14,11 @@ import brideIcon from "@/assets/bride_icon.png";
 import groomIcon from "@/assets/groom_icon.png";
 import flowerTop from "@/assets/flower_top.png";
 import flowerLily from "@/assets/flower_lily.png";
+import couple1 from "@/assets/couple_1.webp";
+import couple2 from "@/assets/couple_2.webp";
+import couple3 from "@/assets/couple_3.webp";
+import couple4 from "@/assets/couple_4.webp";
+import couple5 from "@/assets/couple_5.webp";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -50,7 +55,7 @@ const EVENTS_DATA: Event[] = [
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
     icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-mehendi-600" />,
     color: "mehendi",
-    image: "/src/assets/couple_5.webp",
+    image: couple5,
     dressCode: "Bright traditional colors, comfortable for sitting",
     side: ["dulhan"],
   },
@@ -64,9 +69,9 @@ const EVENTS_DATA: Event[] = [
       "Join us for the traditional Haldi ceremony filled with turmeric, laughter, and blessings. This sacred ritual marks the beginning of our wedding celebrations.",
     icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-haldi-600" />,
     color: "haldi",
-    image: "/src/assets/couple_1.webp",
+    image: couple1,
     dressCode: "Bright colors, comfortable traditional wear",
-    side: ["dulha", "dulhan"], // Changed from "both" to array
+    side: ["dulha", "dulhan"],
   },
   {
     title: "Sangeet Night",
@@ -78,7 +83,7 @@ const EVENTS_DATA: Event[] = [
       "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories.",
     icon: <Music className="h-4 w-4 md:h-8 md:w-8 text-wedding-magenta-600" />,
     color: "magenta",
-    image: "/src/assets/couple_2.webp",
+    image: couple2,
     dressCode: "Festive attire, ready to dance!",
     side: ["dulha", "dulhan"],
   },
@@ -92,7 +97,7 @@ const EVENTS_DATA: Event[] = [
       "The sacred ceremony where we exchange vows and begin our journey as one. Witness the union of two hearts in the presence of family and friends.",
     icon: <Calendar className="h-4 w-4 md:h-8 md:w-8 text-wedding-sindoor-600" />,
     color: "sindoor",
-    image: "/src/assets/couple_3.webp",
+    image: couple3,
     dressCode: "Formal traditional or contemporary wear",
     side: ["dulha", "dulhan"],
   },
@@ -106,7 +111,7 @@ const EVENTS_DATA: Event[] = [
       "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration.",
     icon: <Users className="h-4 w-4 md:h-8 md:w-8 text-wedding-royal-600" />,
     color: "royal",
-    image: "/src/assets/couple_4.webp",
+    image: couple4,
     dressCode: "Formal traditional or contemporary wear",
     side: ["dulha"],
   },
