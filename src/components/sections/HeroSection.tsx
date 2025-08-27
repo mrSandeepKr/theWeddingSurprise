@@ -1,10 +1,37 @@
 import { Button } from "@/components/ui/button";
 import CountdownTimer from "../CountdownTimer";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import heroImage from "@/assets/hero.webp";
-import logoVideo from "@/assets/logo_animated.mp4";
+
+// Preload critical images
+const preloadImage = (src: string) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = resolve;
+    img.onerror = reject;
+    img.src = src;
+  });
+};
 
 export default function HeroSection() {
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+
+  useEffect(() => {
+    // Preload critical assets
+    const loadAssets = async () => {
+      try {
+        await preloadImage(heroImage);
+        setHeroImageLoaded(true);
+      } catch (error) {
+        console.warn('Failed to preload hero assets:', error);
+        setHeroImageLoaded(true); // Fallback
+      }
+    };
+
+    loadAssets();
+  }, []);
+
   return (
     <section
       id="home"
@@ -51,54 +78,48 @@ export default function HeroSection() {
           >
             Payal
           </motion.h1>
+
+          <motion.p
+            className="text-xl md:text-2xl text-white/90 mb-8 font-crimson italic"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+          >
+            "Two hearts, one love, forever together"
+          </motion.p>
+
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.4 }}
+          >
+            <CountdownTimer />
+          </motion.div>
+
+          <motion.div
+            className="space-y-4 md:space-y-0 space-x-4 md:space-x-6 md:flex md:justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.6 }}
+          >
+            <Button
+              size="lg"
+              className="bg-rose-600 hover:bg-rose-700 text-white px-3 md:px-8 py-2 md:py-4 text-base md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              onClick={() => document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Our Story
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white hover:bg-white text-rose-900 hover:text-rose-600 px-3 md:px-8 py-2 md:py-4 text-base md:text-base font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              onClick={() => document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              View Events
+            </Button>
+          </motion.div>
         </div>
-
-        <motion.div
-          className="mt-36 space-y-4 backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-        >
-          <p className="text-xl md:text-2xl text-white/95 font-light">
-            <span className="font-crimson">Together with their families</span>
-          </p>
-          <p className="text-lg md:text-xl text-white/90 font-crimson">
-            request the honor of your presence
-          </p>
-          <p className="text-2xl md:text-3xl text-white font-semibold font-playfair">
-            at their wedding celebration
-          </p>
-          <p className="text-xl md:text-2xl text-white/95 font-medium mt-4 font-crimson">
-            <span className="font-playfair text-2xl">February 5, 2026</span>
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="py-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-        >
-          <CountdownTimer />
-        </motion.div>
-      </motion.div>
-
-      {/* Elegant decorative elements */}
-      <motion.div
-        className="absolute top-1/4 left-10 text-white/20 text-8xl"
-        initial={{ opacity: 0, rotate: -45 }}
-        animate={{ opacity: 1, rotate: 0 }}
-        transition={{ duration: 1.5, delay: 2 }}
-      >
-        ❀
-      </motion.div>
-      <motion.div
-        className="absolute bottom-1/4 right-10 text-white/20 text-8xl"
-        initial={{ opacity: 0, rotate: 45 }}
-        animate={{ opacity: 1, rotate: 0 }}
-        transition={{ duration: 1.5, delay: 2.2 }}
-      >
-        ❀
       </motion.div>
     </section>
   );

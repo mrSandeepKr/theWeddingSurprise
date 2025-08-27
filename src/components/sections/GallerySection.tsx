@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -11,91 +11,27 @@ import { motion, useInView } from "framer-motion";
 import { X } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 
-// Direct imports for all images
-import couple1 from "@/assets/couple_1.webp";
-import couple2 from "@/assets/couple_2.webp";
-import couple3 from "@/assets/couple_3.webp";
-import couple4 from "@/assets/couple_4.webp";
-import couple5 from "@/assets/couple_5.webp";
-import couple6 from "@/assets/couple_6.webp";
-import couple7 from "@/assets/couple_7.webp";
-import couple8 from "@/assets/couple_8.webp";
-import couple9 from "@/assets/couple_9.webp";
-import couple10 from "@/assets/couple_10.webp";
-import couple11 from "@/assets/couple_11.webp";
-import couple12 from "@/assets/couple_12.webp";
-import couple13 from "@/assets/couple_13.webp";
-import couple14 from "@/assets/couple_14.webp";
-import couple15 from "@/assets/couple_15.webp";
-import couple16 from "@/assets/couple_16.webp";
-import couple17 from "@/assets/couple_17.webp";
-import couple18 from "@/assets/couple_18.webp";
-import couple19 from "@/assets/couple_19.webp";
-import couple20 from "@/assets/couple_20.webp";
-import couple21 from "@/assets/couple_21.webp";
-import couple22 from "@/assets/couple_22.webp";
-import couple23 from "@/assets/couple_23.webp";
-import couple24 from "@/assets/couple_24.webp";
-import family1 from "@/assets/family_1.webp";
-import family2 from "@/assets/family_2.webp";
-import family3 from "@/assets/family_3.webp";
-import family4 from "@/assets/family_4.webp";
-import family5 from "@/assets/family_5.webp";
-import family6 from "@/assets/family_6.webp";
-import family7 from "@/assets/family_7.webp";
-import preWedding1 from "@/assets/pre_wedding_1.webp";
-import preWedding2 from "@/assets/pre_wedding_2.webp";
+// Dynamic image loading function
+const loadImage = (imageName: string) => {
+  return import(`@/assets/${imageName}.webp`).then(module => module.default);
+};
 
-// Types and Constants
-const CATEGORIES = [
-  "All Photos",
-  "US",
-  "Pre-Wedding",
-  "Family Moments",
-] as const;
+// Image metadata for dynamic loading
+const IMAGE_METADATA = {
+  couple: Array.from({ length: 24 }, (_, i) => `couple_${i + 1}`),
+  family: Array.from({ length: 7 }, (_, i) => `family_${i + 1}`),
+  preWedding: ['pre_wedding_1', 'pre_wedding_2']
+};
 
-type Category = (typeof CATEGORIES)[number];
-type SpecificCategory = Exclude<Category, "All Photos">;
-type MasterImage = { image: string; category: SpecificCategory };
+interface MasterImage {
+  image: string;
+  category: "couple" | "family" | "preWedding";
+  loaded?: boolean;
+}
 
-const masterImages: MasterImage[] = [
-  // US (Couple) photos
-  { image: couple1, category: "US" },
-  { image: couple2, category: "US" },
-  { image: couple3, category: "US" },
-  { image: couple4, category: "US" },
-  { image: couple5, category: "US" },
-  { image: couple6, category: "US" },
-  { image: couple7, category: "US" },
-  { image: couple8, category: "US" },
-  { image: couple9, category: "US" },
-  { image: couple10, category: "US" },
-  { image: couple11, category: "US" },
-  { image: couple12, category: "US" },
-  { image: couple13, category: "US" },
-  { image: couple14, category: "US" },
-  { image: couple15, category: "US" },
-  { image: couple16, category: "US" },
-  { image: couple17, category: "US" },
-  { image: couple18, category: "US" },
-  { image: couple19, category: "US" },
-  { image: couple20, category: "US" },
-  { image: couple21, category: "US" },
-  { image: couple22, category: "US" },
-  { image: couple23, category: "US" },
-  { image: couple24, category: "US" },
-  // Pre-Wedding photos
-  { image: preWedding1, category: "Pre-Wedding" },
-  { image: preWedding2, category: "Pre-Wedding" },
-  // Family photos
-  { image: family1, category: "Family Moments" },
-  { image: family2, category: "Family Moments" },
-  { image: family3, category: "Family Moments" },
-  { image: family4, category: "Family Moments" },
-  { image: family5, category: "Family Moments" },
-  { image: family6, category: "Family Moments" },
-  { image: family7, category: "Family Moments" },
-];
+// Lazy load gallery components
+const LazyGalleryCarousel = lazy(() => import('./GalleryCarousel'));
+const LazyImageModal = lazy(() => import('./ImageModal'));
 
 // Loading Spinner Component
 function LoadingSpinner() {
@@ -119,15 +55,15 @@ function ErrorPlaceholder() {
 // Hover Overlay Component
 function HoverOverlay() {
   return (
-    <div className="absolute inset-0 bg-red-100 bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-      <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <span className="text-sm font-medium">Click to enlarge</span>
+    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-center justify-center">
+      <div className="text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-lg">
+        View Image
       </div>
     </div>
   );
 }
 
-// Gallery Item Component
+// Gallery Item Props
 interface GalleryItemProps {
   item: MasterImage;
   idx: number;
@@ -194,183 +130,140 @@ function GalleryItem({
 
 // Category Filter Component
 interface CategoryFilterProps {
-  selectedCategory: Category;
-  onCategoryChange: (category: Category) => void;
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
 }
 
-function CategoryFilter({
-  selectedCategory,
-  onCategoryChange,
-}: CategoryFilterProps) {
+function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFilterProps) {
+  const categories = [
+    { key: "all", label: "All Photos", emoji: "💕" },
+    { key: "couple", label: "Couple", emoji: "👫" },
+    { key: "family", label: "Family", emoji: "👨‍👩‍👧‍👦" },
+    { key: "preWedding", label: "Pre-Wedding", emoji: "💍" },
+  ];
+
   return (
     <div className="flex flex-wrap justify-center gap-3 mb-8">
-      {CATEGORIES.map((cat) => (
+      {categories.map((category) => (
         <Button
-          key={cat}
-          variant={selectedCategory === cat ? "default" : "outline"}
-          onClick={() => onCategoryChange(cat)}
-          className={`${
-            selectedCategory === cat
-              ? "bg-wedding-sindoor-700 hover:bg-rose-700 text-white md:h-14 rounded-md md:px-8 text-base"
-              : "border-rose-600 text-rose-600 hover:bg-rose-50 md:h-14 rounded-md md:px-8 text-base"
+          key={category.key}
+          variant={activeCategory === category.key ? "default" : "outline"}
+          onClick={() => onCategoryChange(category.key)}
+          className={`px-6 py-3 rounded-full transition-all duration-300 ${
+            activeCategory === category.key
+              ? "bg-rose-600 text-white shadow-lg scale-105"
+              : "bg-white/80 text-rose-700 hover:bg-rose-100 border-rose-200"
           }`}
         >
-          {cat}
+          <span className="mr-2">{category.emoji}</span>
+          {category.label}
         </Button>
       ))}
     </div>
   );
 }
 
-// Gallery Carousel Component
-interface GalleryCarouselProps {
-  images: MasterImage[];
-  imageErrors: Set<string>;
-  imageLoading: Set<string>;
-  onImageClick: (imageSrc: string) => void;
-  onImageLoadStart: (imageSrc: string) => void;
-  onImageLoad: (imageSrc: string) => void;
-  onImageError: (imageSrc: string) => void;
-  autoplay: React.MutableRefObject<any>;
-}
-
-function GalleryCarousel({
-  images,
-  imageErrors,
-  imageLoading,
-  onImageClick,
-  onImageLoadStart,
-  onImageLoad,
-  onImageError,
-  autoplay,
-}: GalleryCarouselProps) {
-  return (
-    <Carousel
-      className="w-full"
-      opts={{
-        loop: true,
-        align: "start",
-        skipSnaps: false,
-        dragFree: true,
-      }}
-      plugins={[autoplay.current]}
-    >
-      <CarouselContent className="-ml-2 md:-ml-4">
-        {images.map((item, idx) => {
-          const imageKey = `${item.category}-${idx}`;
-          const hasError = imageErrors.has(item.image);
-          const isLoading = imageLoading.has(item.image);
-
-          return (
-            <GalleryItem
-              key={imageKey}
-              item={item}
-              idx={idx}
-              isLoading={isLoading}
-              hasError={hasError}
-              onImageClick={onImageClick}
-              onImageLoadStart={onImageLoadStart}
-              onImageLoad={onImageLoad}
-              onImageError={onImageError}
-            />
-          );
-        })}
-      </CarouselContent>
-      <CarouselPrevious className="hidden md:flex -left-12 hover:bg-rose-100" />
-      <CarouselNext className="hidden md:flex -right-12 hover:bg-rose-100" />
-    </Carousel>
-  );
-}
-
-// Image Modal Component
-interface ImageModalProps {
-  selectedImage: string | null;
-  onClose: () => void;
-}
-
-function ImageModal({ selectedImage, onClose }: ImageModalProps) {
-  if (!selectedImage) return null;
+// Gallery Header Component
+function GalleryHeader() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
+      ref={ref}
+      className="text-center mb-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <motion.div
-        className="relative max-w-7xl max-h-full"
-        initial={{ scale: 0.5, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.5, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <img
-          src={selectedImage}
-          alt="Enlarged view"
-          className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-        />
-
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-all duration-200"
-        >
-          <X className="h-6 w-6" />
-        </button>
-
-        {/* Navigation hint */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black bg-opacity-50 px-3 py-1 rounded-full">
-          Press ESC to close
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// Gallery Header Component
-function GalleryHeader() {
-  return (
-    <div className="text-center mb-10">
       <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
-        Gallery
+        Our Gallery
       </h2>
       <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
-        Browse moments from US, Pre-Wedding, and Family celebrations.
+        Capturing the beautiful moments of our journey together. Each photo
+        tells a story of love, laughter, and the memories we've created.
       </p>
-    </div>
+    </motion.div>
   );
 }
 
 // Main Gallery Section Component
 export default function GallerySection() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<Category>("All Photos");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
   const [imageLoading, setImageLoading] = useState<Set<string>>(new Set());
-
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px 0px" });
-
-  // Autoplay plugin for continuous carousel
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+  const [loadedImages, setLoadedImages] = useState<Map<string, string>>(new Map());
+  
   const autoplay = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true, stopOnMouseEnter: true }),
+    Autoplay({ delay: 3000, stopOnInteraction: true })
   );
 
-  const imagesToShow =
-    selectedCategory === "All Photos"
-      ? masterImages
-      : masterImages.filter((i) => i.category === selectedCategory);
+  // Dynamically create master images with lazy loading
+  const masterImages = useMemo(() => {
+    const images: MasterImage[] = [];
+    
+    Object.entries(IMAGE_METADATA).forEach(([category, imageNames]) => {
+      imageNames.forEach((imageName) => {
+        const imageUrl = loadedImages.get(imageName);
+        if (imageUrl) {
+          images.push({
+            image: imageUrl,
+            category: category as "couple" | "family" | "preWedding",
+            loaded: true
+          });
+        } else {
+          // Placeholder for unloaded images
+          images.push({
+            image: '', // Will be loaded dynamically
+            category: category as "couple" | "family" | "preWedding",
+            loaded: false
+          });
+        }
+      });
+    });
+    
+    return images;
+  }, [loadedImages]);
+
+  // Load images dynamically when component mounts
+  useEffect(() => {
+    const loadImagesAsync = async () => {
+      const imagePromises = Object.entries(IMAGE_METADATA).flatMap(([category, imageNames]) =>
+        imageNames.map(async (imageName) => {
+          try {
+            const imageUrl = await loadImage(imageName);
+            return { imageName, imageUrl };
+          } catch (error) {
+            console.warn(`Failed to load image: ${imageName}`);
+            return null;
+          }
+        })
+      );
+
+      const results = await Promise.allSettled(imagePromises);
+      const newLoadedImages = new Map();
+      
+      results.forEach((result) => {
+        if (result.status === 'fulfilled' && result.value) {
+          const { imageName, imageUrl } = result.value;
+          newLoadedImages.set(imageName, imageUrl);
+        }
+      });
+      
+      setLoadedImages(newLoadedImages);
+    };
+
+    loadImagesAsync();
+  }, []);
+
+  const filteredImages = masterImages.filter((image) => {
+    if (activeCategory === "all") return image.loaded;
+    return activeCategory === image.category && image.loaded;
+  });
 
   const handleImageClick = (imageSrc: string) => {
     setSelectedImage(imageSrc);
-  };
-
-  const closeModal = () => {
-    setSelectedImage(null);
   };
 
   const handleImageError = (imageSrc: string) => {
@@ -394,11 +287,11 @@ export default function GallerySection() {
     setImageLoading((prev) => new Set([...prev, imageSrc]));
   };
 
-  // Handle keyboard navigation for modal
+  // Keyboard navigation for modal
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && selectedImage) {
-        closeModal();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && selectedImage) {
+        setSelectedImage(null);
       }
     };
 
@@ -416,27 +309,20 @@ export default function GallerySection() {
   }, [selectedImage]);
 
   return (
-    <>
-      <section
-        id="gallery"
-        className="py-16 px-6 bg-gradient-to-br from-rose-50 to-pink-50"
-      >
-        <motion.div
-          ref={sectionRef}
-          className="max-w-full mx-auto md:px-10"
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <GalleryHeader />
-
-          <CategoryFilter
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
-
-          <GalleryCarousel
-            images={imagesToShow}
+    <section
+      id="gallery"
+      className="py-20 px-6 bg-gradient-to-br from-orange-50 to-rose-50"
+    >
+      <div className="max-w-full mx-auto">
+        <GalleryHeader />
+        <CategoryFilter
+          activeCategory={activeCategory}
+          onCategoryChange={setActiveCategory}
+        />
+        
+        <Suspense fallback={<LoadingSpinner />}>
+          <LazyGalleryCarousel
+            images={filteredImages}
             imageErrors={imageErrors}
             imageLoading={imageLoading}
             onImageClick={handleImageClick}
@@ -445,10 +331,17 @@ export default function GallerySection() {
             onImageError={handleImageError}
             autoplay={autoplay}
           />
-        </motion.div>
-      </section>
+        </Suspense>
 
-      <ImageModal selectedImage={selectedImage} onClose={closeModal} />
-    </>
+        {selectedImage && (
+          <Suspense fallback={null}>
+            <LazyImageModal
+              imageSrc={selectedImage}
+              onClose={() => setSelectedImage(null)}
+            />
+          </Suspense>
+        )}
+      </div>
+    </section>
   );
 }
