@@ -10,10 +10,10 @@ export default function Navbar() {
 
   const navItems = [
     { name: "Home", href: "#home" },
+    { name: "Meet Us", href: "#couple" },
     { name: "Our Story", href: "#story" },
     { name: "Events", href: "#events" },
     { name: "Gallery", href: "#gallery" },
-    { name: "Guest Info", href: "#guest-info" },
     { name: "Memory Wall", href: "#memory-wall" },
   ];
 

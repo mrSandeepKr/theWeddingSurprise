@@ -4,6 +4,12 @@ import HeroSection from "@/components/sections/HeroSection";
 import { Heart } from "lucide-react";
 
 // Lazy load sections with better loading boundaries
+const MeetTheCoupleSection = lazy(() =>
+  import("@/components/sections/MeetTheCoupleSection").then((module) => ({
+    default: module.default,
+  })),
+);
+
 const OurStorySection = lazy(() =>
   import("@/components/sections/OurStorySection").then((module) => ({
     default: module.default,
@@ -51,6 +57,10 @@ export default function WeddingInvitation() {
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50">
       <Navbar />
       <HeroSection />
+
+      <Suspense fallback={<SectionLoader height="h-96" />}>
+        <MeetTheCoupleSection />
+      </Suspense>
 
       <Suspense fallback={<SectionLoader height="h-64" />}>
         <OurStorySection />
