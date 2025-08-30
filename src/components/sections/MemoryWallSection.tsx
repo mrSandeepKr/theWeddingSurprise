@@ -1,252 +1,365 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Heart, MessageCircle, Upload, Send, Camera } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MessageCircle, Send } from "lucide-react";
+import Papa from 'papaparse';
+import memoryWallBg from '@/assets/memory_wall_background.jpeg';
 
-interface Memory {
+interface MessageStruct {
   id: number;
   name: string;
   message: string;
+  thumbnailPic?: string;
+  images: string[];
   date: string;
-  type: "message" | "photo";
 }
 
-export default function MemoryWallSection() {
-  const [memories, setMemories] = useState<Memory[]>([
-    {
-      id: 1,
-      name: "Priya Sharma",
-      message:
-        "Wishing you both a lifetime of love, laughter, and endless happiness! Can't wait to celebrate with you! ❤️",
-      date: "2 days ago",
-      type: "message",
-    },
-    {
-      id: 2,
-      name: "Rajesh Kumar",
-      message:
-        "So excited for the big day! You two are perfect for each other. Looking forward to the sangeet night! 🕺💃",
-      date: "3 days ago",
-      type: "message",
-    },
-    {
-      id: 3,
-      name: "Anita Patel",
-      message: "Shared a beautiful photo from your engagement ceremony",
-      date: "5 days ago",
-      type: "photo",
-    },
-    {
-      id: 4,
-      name: "Michael Chen",
-      message:
-        "Congratulations to the happy couple! May your marriage be filled with all the right ingredients: a heap of love, a dash of humor, a touch of romance, and a spoonful of understanding.",
-      date: "1 week ago",
-      type: "message",
-    },
-  ]);
+interface CSVRow {
+  "Timestamp": string;
+  "Name to Show (Please be nice XD)": string;
+  "Message": string;
+  "Pictures (Optional)": string;
+  "Display Picture (Optional)": string;
+  "Approved": string;
+}
 
-  const [newMemory, setNewMemory] = useState({
-    name: "",
-    message: "",
-  });
-
-  const [showForm, setShowForm] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newMemory.name && newMemory.message) {
-      const memory: Memory = {
-        id: memories.length + 1,
-        name: newMemory.name,
-        message: newMemory.message,
-        date: "Just now",
-        type: "message",
-      };
-      setMemories([memory, ...memories]);
-      setNewMemory({ name: "", message: "" });
-      setShowForm(false);
-    }
+// Header Component
+function MemoryWallHeader() {
+  const handleShareMessage = () => {
+    window.open('https://forms.gle/JiTvouwuuEdZavgy7', '_blank');
   };
 
   return (
-    <section id="memory-wall" className="py-20 px-6 bg-white">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair">
-            Memory Wall
-          </h2>
-          <p className="text-lg text-rose-700 max-w-2xl mx-auto mb-8 font-crimson">
-            Share your wishes, memories, and blessings for Sandeep and Payal.
-            Your messages mean the world to us!
-          </p>
+    <div className="relative z-10 text-center mb-16">
+      <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-playfair drop-shadow-lg">
+        Memory Wall
+      </h2>
+      <p className="text-lg text-white max-w-2xl mx-auto mb-8 font-crimson drop-shadow-md">
+        Share your wishes, memories, and blessings.
+        Your messages mean the world to us!
+      </p>
 
-          <div className="flex justify-center gap-4">
-            <Button
-              onClick={() => setShowForm(!showForm)}
-              className="bg-rose-600 hover:bg-rose-700 text-white px-6 py-3"
-            >
-              <MessageCircle className="h-5 w-5 mr-2" />
-              Share a Message
-            </Button>
-            <Button
-              variant="outline"
-              className="border-rose-600 text-rose-600 hover:bg-rose-50 px-6 py-3"
-            >
-              <Camera className="h-5 w-5 mr-2" />
-              Upload Photo
-            </Button>
+      <div className="flex justify-center">
+        <Button
+          onClick={handleShareMessage}
+          className="bg-rose-600 hover:bg-rose-700 text-white px-6 py-3 shadow-lg"
+        >
+          <MessageCircle className="h-5 w-5 mr-2" />
+          Share a Message
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// Memory Image Gallery Component
+function MemoryImageGallery({ images, authorName }: { images: string[]; authorName: string }) {
+  if (images.length === 0) return null;
+
+  // Single image - let it adjust to natural height
+  if (images.length === 1) {
+    return (
+      <div className="mb-4">
+        <div className="rounded-lg overflow-hidden">
+          <img
+            src={images[0]}
+            alt={`Photo by ${authorName}`}
+            className="w-full object-cover hover:scale-105 transition-transform cursor-pointer"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Multiple images - horizontal scroll with controlled height
+  const imageWidth = images.length > 3 ? 'w-40' : 'w-48'; // Show 2.5 images if more than 3
+  
+  return (
+    <div className="mb-4 w-full min-w-0"> {/* Added min-w-0 to allow shrinking */}
+      <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 w-full">
+        {images.map((imageUrl, index) => (
+          <div 
+            key={index} 
+            className={`${imageWidth} flex-shrink-0 rounded-lg overflow-hidden`}
+          >
+            <img
+              src={imageUrl}
+              alt={`Photo ${index + 1} by ${authorName}`}
+              className="w-full h-32 md:h-48 object-cover hover:scale-105 transition-transform cursor-pointer"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Memory Card Component
+function MemoryCard({ memory }: { memory: MessageStruct }) {
+  return (
+    <Card className="border-rose-200 shadow-lg hover:shadow-xl transition-shadow overflow-hidden"> {/* Added overflow-hidden to card */}
+      <CardContent className="p-6">
+        <div className="flex items-start space-x-4 min-w-0"> {/* Added min-w-0 */}
+          <Avatar className="h-12 w-12 flex-shrink-0"> {/* Added flex-shrink-0 */}
+            {memory.thumbnailPic ? (
+              <AvatarImage src={memory.thumbnailPic} alt={memory.name} />
+            ) : null}
+            <AvatarFallback className="bg-rose-100 text-rose-600 font-semibold">
+              {memory.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .substring(0, 2)
+                .toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0"> {/* Added min-w-0 to allow proper shrinking */}
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-semibold text-rose-800">
+                {memory.name}
+              </h4>
+              <span className="text-sm text-rose-500 flex-shrink-0"> {/* Added flex-shrink-0 */}
+                {memory.date}
+              </span>
+            </div>
+
+            <p className="text-rose-700 leading-relaxed mb-3">
+              {memory.message}
+            </p>
+
+            <MemoryImageGallery images={memory.images} authorName={memory.name} />
           </div>
         </div>
+      </CardContent>
+    </Card>
+  );
+}
 
-        {/* Submission Form */}
-        {showForm && (
-          <Card className="border-rose-200 shadow-lg mb-12">
-            <CardContent className="p-8">
-              <h3 className="text-xl font-semibold text-rose-800 mb-6">
-                Share Your Wishes
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="guestName">Your Name</Label>
-                  <Input
-                    id="guestName"
-                    value={newMemory.name}
-                    onChange={(e) =>
-                      setNewMemory((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }))
-                    }
-                    placeholder="Enter your name"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="guestMessage">Your Message</Label>
-                  <Textarea
-                    id="guestMessage"
-                    value={newMemory.message}
-                    onChange={(e) =>
-                      setNewMemory((prev) => ({
-                        ...prev,
-                        message: e.target.value,
-                      }))
-                    }
-                    placeholder="Share your wishes, memories, or blessings for the couple..."
-                    rows={4}
-                    required
-                  />
-                </div>
-                <div className="flex gap-4">
-                  <Button
-                    type="submit"
-                    className="bg-rose-600 hover:bg-rose-700 text-white"
-                  >
-                    <Send className="h-4 w-4 mr-2" />
-                    Post Message
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setShowForm(false)}
-                    className="border-gray-300 text-gray-600 hover:bg-gray-50"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        )}
+// Loading State Component
+function LoadingState() {
+  return (
+    <section id="memory-wall" className="py-20 px-6 bg-white">
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600 mx-auto"></div>
+        <p className="mt-4 text-rose-600">Loading memories...</p>
+      </div>
+    </section>
+  );
+}
 
-        {/* Memory Feed */}
+// Error State Component
+function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) {
+  return (
+    <section id="memory-wall" className="py-20 px-6 bg-white">
+      <div className="max-w-4xl mx-auto text-center">
+        <p className="text-red-600 mb-4">{error}</p>
+        <Button onClick={onRetry} className="bg-rose-600 hover:bg-rose-700 text-white">
+          Try Again
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+// Empty State Component
+function EmptyState() {
+  return (
+    <div className="text-center py-12">
+      <p className="text-rose-600 text-lg">No approved memories yet. Be the first to share!</p>
+    </div>
+  );
+}
+
+// Moderation Notice Component
+function ModerationNotice() {
+  return (
+    <div className="mt-12 text-center">
+      <Card className="border-rose-200 shadow-lg bg-rose-50/50">
+        <CardContent className="p-6">
+          <p className="text-sm text-rose-600 italic">
+            All messages and photos are moderated before appearing on the
+            memory wall. Thank you for keeping this space positive and
+            joyful! ✨
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Main Component
+export default function MemoryWallSection() {
+  const [memories, setMemories] = useState<MessageStruct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Function to convert Google Drive URL to viewable format
+  const convertGoogleDriveUrl = (urlString: string): string => {
+    // Otherwise try to extract from ?id= style
+    const url = new URL(urlString);
+    const fileId = url.searchParams.get("id");
+    if (fileId) {
+      return `https://drive.google.com/thumbnail?id=${fileId}`
+    }
+
+    throw new Error("Invalid Google Drive URL");
+  };
+
+  // Function to parse CSV data
+  const parseCSV = (csvText: string): CSVRow[] => {
+    const result = Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: (header: string) => header.trim(),
+      transform: (value: string) => value.trim()
+    });
+    
+    if (result.errors.length > 0) {
+      console.error('CSV parsing errors:', result.errors);
+    }
+    
+    return result.data as CSVRow[];
+  };
+
+  // Function to format timestamp and determine if it should show "Recently"
+  const formatTimestamp = (timestamp: string): string => {
+    try {
+      // Parse the timestamp format: "8/30/2025 19:47:56"
+      const date = new Date(timestamp);
+      
+      // Check if the date is valid
+      if (isNaN(date.getTime())) {
+        return 'Recently';
+      }
+      
+      const now = new Date();
+      const diffInMs = now.getTime() - date.getTime();
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+      
+      // If less than 2 days, show "Recently"
+      if (diffInDays < 2) {
+        return 'Recently';
+      }
+      
+      // Otherwise, format the date nicely
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error parsing timestamp:', error);
+      return 'Recently';
+    }
+  };
+
+  // Function to fetch and process CSV data
+  const fetchMemories = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSDur-hVADdtcLTMwwTqkzqcrBOPwfMdQjpo4BDsyltiniqAEkm9ZquqjElrCmvHVDzHVyn1tzAyjYG/pub?gid=1961168836&single=true&output=csv',
+        {
+          cache: 'no-store'
+        }
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch CSV data');
+      }
+      const csvText = await response.text();
+      const csvRows = parseCSV(csvText);
+      
+      // Filter only approved rows
+      const approvedRows = csvRows.filter(row => 
+        row.Approved && row.Approved.trim().toLowerCase() === 'y' || 
+        row.Approved && row.Approved.trim().toLowerCase() === 'Y' 
+      );
+
+      // Transform to MessageStruct format
+      const transformedMemories: MessageStruct[] = approvedRows.map((row, index) => {
+        const images = row["Pictures (Optional)"] 
+          ? row["Pictures (Optional)"].split(',').map(url => convertGoogleDriveUrl(url.trim())).filter(url => url)
+          : [];
+        
+        const thumbnailPic = row["Display Picture (Optional)"] 
+          ? convertGoogleDriveUrl(row["Display Picture (Optional)"].trim())
+          : undefined;
+
+        return {
+          id: index + 1,
+          name: row["Name to Show (Please be nice XD)"] || 'Anonymous',
+          message: row["Message"] || '',
+          thumbnailPic,
+          images,
+          date: formatTimestamp(row.Timestamp) // Use the new formatting function
+        };
+      });
+
+      console.log(transformedMemories)
+
+      setMemories(transformedMemories);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching memories:', err);
+      setError('Failed to load memories. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMemories();
+  }, []);
+
+  if (loading) {
+    return <LoadingState />;
+  }
+
+  if (error) {
+    return <ErrorState error={error} onRetry={fetchMemories} />;
+  }
+
+  return (
+    <section id="memory-wall" className="relative py-20 px-6 bg-white overflow-hidden">
+      {/* Background Image with Blur Effect */}
+      <div className="absolute h-96 inset-0 w-full">
+        <div 
+          className="w-full h-96 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(${memoryWallBg})`,
+          }}
+        />
+        {/* Gradient overlay for blur effect at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
+        {/* Additional blur overlay at bottom */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-sm"
+          style={{
+            background: 'linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 50%, transparent 100%)'
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+        <MemoryWallHeader />
+
         <div className="space-y-6">
           {memories.map((memory) => (
-            <Card
-              key={memory.id}
-              className="border-rose-200 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-rose-100 text-rose-600 font-semibold">
-                      {memory.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .substring(0, 2)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-rose-800">
-                        {memory.name}
-                      </h4>
-                      <span className="text-sm text-rose-500">
-                        {memory.date}
-                      </span>
-                    </div>
-
-                    {memory.type === "photo" ? (
-                      <div>
-                        <p className="text-rose-700 mb-3">{memory.message}</p>
-                        <div className="bg-gradient-to-br from-rose-100 to-pink-100 rounded-lg p-8 flex items-center justify-center">
-                          <div className="text-center text-rose-600">
-                            <Camera className="h-12 w-12 mx-auto mb-2" />
-                            <p className="text-sm">
-                              Photo shared by {memory.name}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="text-rose-700 leading-relaxed">
-                        {memory.message}
-                      </p>
-                    )}
-
-                    <div className="flex items-center mt-4 space-x-4">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-rose-600 hover:bg-rose-50"
-                      >
-                        <Heart className="h-4 w-4 mr-1" />
-                        <span className="text-sm">Like</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-rose-600 hover:bg-rose-50"
-                      >
-                        <MessageCircle className="h-4 w-4 mr-1" />
-                        <span className="text-sm">Reply</span>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <MemoryCard key={memory.id} memory={memory} />
           ))}
         </div>
 
-        {/* Moderation Notice */}
-        <div className="mt-12 text-center">
-          <Card className="border-rose-200 shadow-lg bg-rose-50/50">
-            <CardContent className="p-6">
-              <p className="text-sm text-rose-600 italic">
-                All messages and photos are moderated before appearing on the
-                memory wall. Thank you for keeping this space positive and
-                joyful! ✨
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+        {memories.length === 0 && <EmptyState />}
+        <ModerationNotice />
       </div>
     </section>
   );
