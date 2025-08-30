@@ -23,9 +23,11 @@ const GallerySection = lazy(() =>
 );
 
 const MemoryWallSection = lazy(() =>
-  import("@/components/sections/MemoryWallSection/MemoryWallSection").then((module) => ({
-    default: module.default,
-  })),
+  import("@/components/sections/MemoryWallSection/MemoryWallSection").then(
+    (module) => ({
+      default: module.default,
+    }),
+  ),
 );
 
 // Enhanced loading component

@@ -29,7 +29,7 @@ export default function ImageModal({ imageSrc, onClose }: ImageModalProps) {
           className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
           loading="eager"
         />
-        
+
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-all duration-200"

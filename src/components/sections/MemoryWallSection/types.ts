@@ -8,10 +8,10 @@ export interface MessageStruct {
 }
 
 export interface CSVRow {
-  "Timestamp": string;
+  Timestamp: string;
   "Name to Show (Please be nice XD)": string;
-  "Message": string;
+  Message: string;
   "Pictures (Optional)": string;
   "Display Picture (Optional)": string;
-  "Approved": string;
+  Approved: string;
 }

@@ -67,7 +67,7 @@ const EVENTS_DATA: Event[] = [
     ),
     color: "mehendi",
     mobileImage: mehendiMobile, // You can specify different images for mobile
-    webImage: mehendiWeb, // You can specify different images for web 
+    webImage: mehendiWeb, // You can specify different images for web
     dressCode: "Let's go green",
     side: ["dulhan"],
   },
@@ -311,7 +311,7 @@ const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
 
 const EventCard = ({ event, index }: { event: Event; index: number }) => {
   const isMobile = useIsMobile();
-  
+
   // Determine which image to use based on device type
   const getEventImage = () => {
     // Priority: mobileImage/webImage -> fallback to image -> null
@@ -324,9 +324,9 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => {
     // Fallback to the original image property for backward compatibility
     return event.image || null;
   };
-  
+
   const eventImage = getEventImage();
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -344,21 +344,21 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => {
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
             <div className="aspect-[4/3] lg:aspect-[3/4] lg:w-1/3 relative overflow-hidden">
-                {eventImage ? (
-                  <img
-                    src={eventImage}
-                    alt={event.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-wedding-gold-100 to-wedding-gold-200 flex items-center justify-center">
-                    <div className="p-1 md:p-6 bg-white/90 rounded-full shadow-lg">
-                      {event.icon}
-                    </div>
+              {eventImage ? (
+                <img
+                  src={eventImage}
+                  alt={event.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-wedding-gold-100 to-wedding-gold-200 flex items-center justify-center">
+                  <div className="p-1 md:p-6 bg-white/90 rounded-full shadow-lg">
+                    {event.icon}
                   </div>
-                )}
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />        
+                </div>
+              )}
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
             {/* Content Section - Made more compact for mobile */}

@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
-import Papa from 'papaparse';
-import memoryWallBg from '@/assets/memory_wall_background.jpeg';
-import MemoryCard from './MemoryCard';
-import { PaginationControls, ResultsSummary } from './Pagination';
-import { MessageStruct, CSVRow } from './types';
+import Papa from "papaparse";
+import memoryWallBg from "@/assets/memory_wall_background.jpeg";
+import MemoryCard from "./MemoryCard";
+import { PaginationControls, ResultsSummary } from "./Pagination";
+import { MessageStruct, CSVRow } from "./types";
 
 // Header Component
 function MemoryWallHeader() {
   const handleShareMessage = () => {
-    window.open('https://forms.gle/JiTvouwuuEdZavgy7', '_blank');
+    window.open("https://forms.gle/JiTvouwuuEdZavgy7", "_blank");
   };
 
   return (
@@ -20,8 +20,8 @@ function MemoryWallHeader() {
         Memory Wall
       </h2>
       <p className="text-lg text-white max-w-2xl mx-auto mb-8 font-crimson drop-shadow-md">
-        Share your wishes, memories, and blessings.
-        Your messages mean the world to us!
+        Share your wishes, memories, and blessings. Your messages mean the world
+        to us!
       </p>
 
       <div className="flex justify-center">
@@ -50,12 +50,21 @@ function LoadingState() {
 }
 
 // Error State Component
-function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) {
+function ErrorState({
+  error,
+  onRetry,
+}: {
+  error: string;
+  onRetry: () => void;
+}) {
   return (
     <section id="memory-wall" className="py-20 px-6 bg-white">
       <div className="max-w-4xl mx-auto text-center">
         <p className="text-red-600 mb-4">{error}</p>
-        <Button onClick={onRetry} className="bg-rose-600 hover:bg-rose-700 text-white">
+        <Button
+          onClick={onRetry}
+          className="bg-rose-600 hover:bg-rose-700 text-white"
+        >
           Try Again
         </Button>
       </div>
@@ -67,7 +76,9 @@ function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) 
 function EmptyState() {
   return (
     <div className="text-center py-12">
-      <p className="text-rose-600 text-lg">No approved memories yet. Be the first to share!</p>
+      <p className="text-rose-600 text-lg">
+        No approved memories yet. Be the first to share!
+      </p>
     </div>
   );
 }
@@ -79,9 +90,8 @@ function ModerationNotice() {
       <Card className="border-rose-200 shadow-lg bg-rose-50/50">
         <CardContent className="p-6">
           <p className="text-sm text-rose-600 italic">
-            All messages and photos are moderated before appearing on the
-            memory wall. Thank you for keeping this space positive and
-            joyful! ✨
+            All messages and photos are moderated before appearing on the memory
+            wall. Thank you for keeping this space positive and joyful! ✨
           </p>
         </CardContent>
       </Card>
@@ -96,7 +106,7 @@ export default function MemoryWallSection() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const memoriesPerPage = 7
+  const memoriesPerPage = 7;
   const totalPages = Math.ceil(memories.length / memoriesPerPage);
   const startIndex = (currentPage - 1) * memoriesPerPage;
   const endIndex = startIndex + memoriesPerPage;
@@ -108,7 +118,7 @@ export default function MemoryWallSection() {
     const url = new URL(urlString);
     const fileId = url.searchParams.get("id");
     if (fileId) {
-      return `https://drive.google.com/thumbnail?id=${fileId}`
+      return `https://drive.google.com/thumbnail?id=${fileId}`;
     }
 
     throw new Error("Invalid Google Drive URL");
@@ -120,13 +130,13 @@ export default function MemoryWallSection() {
       header: true,
       skipEmptyLines: true,
       transformHeader: (header: string) => header.trim(),
-      transform: (value: string) => value.trim()
+      transform: (value: string) => value.trim(),
     });
-    
+
     if (result.errors.length > 0) {
-      console.error('CSV parsing errors:', result.errors);
+      console.error("CSV parsing errors:", result.errors);
     }
-    
+
     return result.data as CSVRow[];
   };
 
@@ -135,30 +145,30 @@ export default function MemoryWallSection() {
     try {
       // Parse the timestamp format: "8/30/2025 19:47:56"
       const date = new Date(timestamp);
-      
+
       // Check if the date is valid
       if (isNaN(date.getTime())) {
-        return 'Recently';
+        return "Recently";
       }
-      
+
       const now = new Date();
       const diffInMs = now.getTime() - date.getTime();
       const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-      
+
       // If less than 2 days, show "Recently"
       if (diffInDays < 2) {
-        return 'Recently';
+        return "Recently";
       }
-      
+
       // Otherwise, format the date nicely
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       });
     } catch (error) {
-      console.error('Error parsing timestamp:', error);
-      return 'Recently';
+      console.error("Error parsing timestamp:", error);
+      return "Recently";
     }
   };
 
@@ -166,51 +176,58 @@ export default function MemoryWallSection() {
   const fetchMemories = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSDur-hVADdtcLTMwwTqkzqcrBOPwfMdQjpo4BDsyltiniqAEkm9ZquqjElrCmvHVDzHVyn1tzAyjYG/pub?gid=1961168836&single=true&output=csv',
+      const response = await fetch(
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDur-hVADdtcLTMwwTqkzqcrBOPwfMdQjpo4BDsyltiniqAEkm9ZquqjElrCmvHVDzHVyn1tzAyjYG/pub?gid=1961168836&single=true&output=csv",
         {
-          cache: 'no-store'
-        }
+          cache: "no-store",
+        },
       );
-      
+
       if (!response.ok) {
-        throw new Error('Failed to fetch CSV data');
+        throw new Error("Failed to fetch CSV data");
       }
       const csvText = await response.text();
       const csvRows = parseCSV(csvText);
-      
+
       // Filter only approved rows
-      const approvedRows = csvRows.filter(row => 
-        row.Approved && row.Approved.trim().toLowerCase() === 'y' || 
-        row.Approved && row.Approved.trim().toLowerCase() === 'Y' 
+      const approvedRows = csvRows.filter(
+        (row) =>
+          (row.Approved && row.Approved.trim().toLowerCase() === "y") ||
+          (row.Approved && row.Approved.trim().toLowerCase() === "Y"),
       );
 
       // Transform to MessageStruct format
-      const transformedMemories: MessageStruct[] = approvedRows.map((row, index) => {
-        const images = row["Pictures (Optional)"] 
-          ? row["Pictures (Optional)"].split(',').map(url => convertGoogleDriveUrl(url.trim())).filter(url => url)
-          : [];
-        
-        const thumbnailPic = row["Display Picture (Optional)"] 
-          ? convertGoogleDriveUrl(row["Display Picture (Optional)"].trim())
-          : undefined;
+      const transformedMemories: MessageStruct[] = approvedRows.map(
+        (row, index) => {
+          const images = row["Pictures (Optional)"]
+            ? row["Pictures (Optional)"]
+                .split(",")
+                .map((url) => convertGoogleDriveUrl(url.trim()))
+                .filter((url) => url)
+            : [];
 
-        return {
-          id: index + 1,
-          name: row["Name to Show (Please be nice XD)"] || 'Anonymous',
-          message: row["Message"] || '',
-          thumbnailPic,
-          images,
-          date: formatTimestamp(row.Timestamp) // Use the new formatting function
-        };
-      });
+          const thumbnailPic = row["Display Picture (Optional)"]
+            ? convertGoogleDriveUrl(row["Display Picture (Optional)"].trim())
+            : undefined;
 
-      console.log(transformedMemories)
+          return {
+            id: index + 1,
+            name: row["Name to Show (Please be nice XD)"] || "Anonymous",
+            message: row["Message"] || "",
+            thumbnailPic,
+            images,
+            date: formatTimestamp(row.Timestamp), // Use the new formatting function
+          };
+        },
+      );
+
+      console.log(transformedMemories);
 
       setMemories(transformedMemories);
       setError(null);
     } catch (err) {
-      console.error('Error fetching memories:', err);
-      setError('Failed to load memories. Please try again later.');
+      console.error("Error fetching memories:", err);
+      setError("Failed to load memories. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -224,9 +241,9 @@ export default function MemoryWallSection() {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     // Smooth scroll to top of memory wall section
-    document.getElementById('memory-wall')?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
+    document.getElementById("memory-wall")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -244,10 +261,13 @@ export default function MemoryWallSection() {
   }
 
   return (
-    <section id="memory-wall" className="relative py-20 px-6 bg-white overflow-hidden">
+    <section
+      id="memory-wall"
+      className="relative py-20 px-6 bg-white overflow-hidden"
+    >
       {/* Background Image with Blur Effect */}
-        <div className="absolute h-96 inset-0 w-full">
-        <div 
+      <div className="absolute h-96 inset-0 w-full">
+        <div
           className="w-full h-96 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(${memoryWallBg})`,
@@ -256,10 +276,11 @@ export default function MemoryWallSection() {
         {/* Gradient overlay for blur effect at bottom */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
         {/* Additional blur overlay at bottom */}
-        <div 
+        <div
           className="absolute bottom-0 left-0 right-0 h-32 backdrop-blur-sm"
           style={{
-            background: 'linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 50%, transparent 100%)'
+            background:
+              "linear-gradient(to top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
           }}
         />
       </div>
@@ -268,7 +289,7 @@ export default function MemoryWallSection() {
         <MemoryWallHeader />
 
         {memories.length > 0 && (
-          <ResultsSummary 
+          <ResultsSummary
             currentPage={currentPage}
             totalPages={totalPages}
             totalMemories={memories.length}
@@ -283,13 +304,13 @@ export default function MemoryWallSection() {
         </div>
 
         {memories.length === 0 && <EmptyState />}
-        
-        <PaginationControls 
+
+        <PaginationControls
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={handlePageChange}
         />
-        
+
         <ModerationNotice />
       </div>
     </section>

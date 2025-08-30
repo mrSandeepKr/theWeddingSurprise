@@ -55,8 +55,10 @@ export default function OurStorySection() {
             Our Story
           </h2>
           <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
-            If our love story were a movie, it would have comedy, drama, a dash of action, and of course… a blockbuster romance.
-            After all, every hero finds his heroine, and every song finds its perfect dance partner. ❤️
+            If our love story were a movie, it would have comedy, drama, a dash
+            of action, and of course… a blockbuster romance. After all, every
+            hero finds his heroine, and every song finds its perfect dance
+            partner. ❤️
           </p>
           {/* Indian Wedding "Fluff" - Placeholder for decorative element */}
           <motion.div
@@ -105,9 +107,11 @@ export default function OurStorySection() {
                 And now...
               </h3>
               <p className="text-lg text-rose-700 italic leading-relaxed font-crimson mb-4">
-                "The trailers are over, the interval is done, it’s time for the grand finale! 
-                We’re all set to say “I do” and begin the most exciting adventure of our lives. 
-                Thank you for dancing, laughing, and celebrating with us in this superhit journey. 💃🕺"
+                "The trailers are over, the interval is done, it’s time for the
+                grand finale! We’re all set to say “I do” and begin the most
+                exciting adventure of our lives. Thank you for dancing,
+                laughing, and celebrating with us in this superhit journey.
+                💃🕺"
               </p>
               <div className="mt-6 text-rose-800 text-xl font-semibold font-crimson">
                 With all our love,
