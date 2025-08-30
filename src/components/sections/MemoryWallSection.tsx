@@ -53,35 +53,16 @@ function MemoryWallHeader() {
   );
 }
 
-// Memory Image Gallery Component
-function MemoryImageGallery({ images, authorName }: { images: string[]; authorName: string }) {
+// Updated Memory Image Gallery Component
+function MemoryImageGallery({ images, authorName, isMobile }: { images: string[]; authorName: string; isMobile?: boolean }) {
   if (images.length === 0) return null;
 
-  // Single image - let it adjust to natural height
-  if (images.length === 1) {
-    return (
-      <div className="mb-4">
-        <div className="rounded-lg overflow-hidden">
-          <img
-            src={images[0]}
-            alt={`Photo by ${authorName}`}
-            className="w-full object-cover hover:scale-105 transition-transform cursor-pointer"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-
   // Multiple images - horizontal scroll with controlled height
-  const imageWidth = images.length > 3 ? 'w-40' : 'w-48'; // Show 2.5 images if more than 3
+  const imageWidth = images.length === 1 ? 'w-60' : (images.length > 3 ? 'w-40' : 'w-48'); // Show 2.5 images if more than 3
   
   return (
-    <div className="mb-4 w-full min-w-0"> {/* Added min-w-0 to allow shrinking */}
-      <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 w-full">
+    <div className={`w-full min-w-0 ${isMobile ? "-mx-4" : ""}`}>
+      <div className={`flex gap-4 overflow-x-auto scrollbar-hide pb-2 w-full ${isMobile ? "px-4" : ""}`}>
         {images.map((imageUrl, index) => (
           <div 
             key={index} 
@@ -103,42 +84,87 @@ function MemoryImageGallery({ images, authorName }: { images: string[]; authorNa
   );
 }
 
-// Memory Card Component
-function MemoryCard({ memory }: { memory: MessageStruct }) {
+// Add import for mobile hook at the top
+import { useIsMobile } from "@/hooks/use-mobile";
+
+// Memory Card Avatar Component
+function MemoryCardAvatar({ memory, isMobile }: { memory: MessageStruct; isMobile: boolean }) {
   return (
-    <Card className="border-rose-200 shadow-lg hover:shadow-xl transition-shadow overflow-hidden"> {/* Added overflow-hidden to card */}
-      <CardContent className="p-6">
-        <div className="flex items-start space-x-4 min-w-0"> {/* Added min-w-0 */}
-          <Avatar className="h-12 w-12 flex-shrink-0"> {/* Added flex-shrink-0 */}
-            {memory.thumbnailPic ? (
-              <AvatarImage src={memory.thumbnailPic} alt={memory.name} />
-            ) : null}
-            <AvatarFallback className="bg-rose-100 text-rose-600 font-semibold">
-              {memory.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .substring(0, 2)
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1 min-w-0"> {/* Added min-w-0 to allow proper shrinking */}
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-semibold text-rose-800">
-                {memory.name}
-              </h4>
-              <span className="text-sm text-rose-500 flex-shrink-0"> {/* Added flex-shrink-0 */}
-                {memory.date}
-              </span>
-            </div>
+    <Avatar className={`${isMobile ? "h-10 w-10" : "h-12 w-12"} flex-shrink-0`}>
+      {memory.thumbnailPic ? (
+        <AvatarImage src={memory.thumbnailPic} alt={memory.name} />
+      ) : null}
+      <AvatarFallback className="bg-rose-100 text-rose-600 font-semibold">
+        {memory.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
 
-            <p className="text-rose-700 leading-relaxed mb-3">
-              {memory.message}
-            </p>
+// Memory Card Header Component
+function MemoryCardHeader({ memory, isMobile }: { memory: MessageStruct; isMobile: boolean }) {
+  return (
+    <div className={`flex ${isMobile ? "flex-col space-y-1" : "items-center justify-between"} mb-2`}>
+      <h4 className={`font-semibold text-rose-800 ${isMobile ? "text-sm" : "text-base"}`}>
+        {memory.name}
+      </h4>
+      <span className={`${isMobile ? "text-xs" : "text-sm"} text-rose-500 ${isMobile ? "" : "flex-shrink-0"}`}>
+        {memory.date}
+      </span>
+    </div>
+  );
+}
 
-            <MemoryImageGallery images={memory.images} authorName={memory.name} />
-          </div>
+// Memory Card Message Component
+function MemoryCardMessage({ message, isMobile }: { message: string; isMobile: boolean }) {
+  return (
+    <p className={`text-rose-700 leading-relaxed mb-3 ${isMobile ? "text-sm" : "text-base"}`}>
+      {message}
+    </p>
+  );
+}
+
+// Updated Memory Card Content Component
+function MemoryCardContent({ memory, isMobile }: { memory: MessageStruct; isMobile: boolean }) {
+  if (isMobile) {
+    return (
+      <div className="flex-1 min-w-0">
+        <MemoryCardHeader memory={memory} isMobile={isMobile} />
+        <MemoryCardMessage message={memory.message} isMobile={isMobile} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex-1 min-w-0">
+      <MemoryCardHeader memory={memory} isMobile={isMobile} />
+      <MemoryCardMessage message={memory.message} isMobile={isMobile} />
+      <MemoryImageGallery images={memory.images} authorName={memory.name} isMobile={isMobile} />
+    </div>
+  );
+}
+
+// Updated Main Memory Card Component
+function MemoryCard({ memory }: { memory: MessageStruct }) {
+  const isMobile = useIsMobile();
+  
+  return (
+    <Card className="border-rose-200 shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
+      <CardContent className={isMobile ? "p-4" : "p-6"}>
+        <div className={`flex items-start ${isMobile ? "space-x-3" : "space-x-4"} min-w-0`}>
+          <MemoryCardAvatar memory={memory} isMobile={isMobile} />
+          <MemoryCardContent memory={memory} isMobile={isMobile} />
         </div>
+        {isMobile && (
+          <div className="mt-3">
+            <MemoryImageGallery images={memory.images} authorName={memory.name} isMobile={isMobile} />
+          </div>
+        )}
       </CardContent>
     </Card>
   );
