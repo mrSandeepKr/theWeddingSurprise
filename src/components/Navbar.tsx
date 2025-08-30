@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,8 +51,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <div className="p-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
-              <Heart className="h-6 w-6 text-white" />
+            <div className="rounded-full bg-white/20 backdrop-blur-sm border border-white/30">
+              <img src={logo} alt="Wedding Logo" className="h-6 w-6 lg:h-8 lg:w-8" />
             </div>
             <span className="ml-3 text-xl font-semibold text-white font-playfair tracking-wide">
               S & P
