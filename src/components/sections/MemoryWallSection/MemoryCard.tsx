@@ -15,9 +15,8 @@ function MemoryImageGallery({
 }) {
   if (images.length === 0) return null;
 
-  // Multiple images - horizontal scroll with controlled height
-  const imageWidth =
-    images.length === 1 ? "w-60" : images.length > 3 ? "w-40" : "w-48"; // Show 2.5 images if more than 3
+  // Fixed height for all images, width will be auto based on aspect ratio
+  const imageHeight = isMobile ? "h-40" : "h-60";
 
   return (
     <div className={`w-full min-w-0 ${isMobile ? "-mx-4" : ""}`}>
@@ -27,12 +26,12 @@ function MemoryImageGallery({
         {images.map((imageUrl, index) => (
           <div
             key={index}
-            className={`${imageWidth} flex-shrink-0 rounded-lg overflow-hidden`}
+            className={`${imageHeight} flex-shrink-0 rounded-lg overflow-hidden`}
           >
             <img
               src={imageUrl}
               alt={`Photo ${index + 1} by ${authorName}`}
-              className="w-full h-32 md:h-48 object-cover hover:scale-105 transition-transform cursor-pointer"
+              className={`${imageHeight} w-auto object-cover hover:scale-105 transition-transform cursor-pointer`}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.style.display = "none";
