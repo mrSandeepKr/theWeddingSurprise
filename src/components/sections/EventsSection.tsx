@@ -15,12 +15,17 @@ import brideIcon from "@/assets/bride_icon.png";
 import groomIcon from "@/assets/groom_icon.png";
 import flowerTop from "@/assets/flower_top.png";
 import flowerLily from "@/assets/flower_lily.png";
-import haldiMobile from "@/assets/haldi_mobile.webp";
+
+import mehendiWeb from "@/assets/mehendi_web.webp";
+import mehendiMobile from "@/assets/mehendi_mobile.jpeg";
+import haldiMobile from "@/assets/haldi_mobile.png";
 import haldiWeb from "@/assets/haldi_web.webp";
-import couple2 from "@/assets/couple_2.webp";
-import couple3 from "@/assets/couple_3.webp";
-import couple4 from "@/assets/couple_4.webp";
-import couple5 from "@/assets/couple_5.webp";
+import sangeetWeb from "@/assets/sangeet_web.webp";
+import sangeetMobile from "@/assets/sangeet_web.webp";
+import shadiWeb from "@/assets/shadi_web.webp";
+import shadiMobile from "@/assets/shadi_mobile.jpeg";
+import receptionWeb from "@/assets/reception_web.webp";
+import receptionMobile from "@/assets/reception_mobile.jpeg";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -61,8 +66,8 @@ const EVENTS_DATA: Event[] = [
       <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-mehendi-600" />
     ),
     color: "mehendi",
-    mobileImage: couple5, // You can specify different images for mobile
-    webImage: couple5, // You can specify different images for web
+    mobileImage: mehendiMobile, // You can specify different images for mobile
+    webImage: mehendiWeb, // You can specify different images for web 
     dressCode: "Let's go green",
     side: ["dulhan"],
   },
@@ -91,8 +96,8 @@ const EVENTS_DATA: Event[] = [
       "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories. 💃✨",
     icon: <Music className="h-3 w-3 md:h-6 md:w-6 text-wedding-magenta-600" />,
     color: "magenta",
-    mobileImage: couple2,
-    webImage: couple2,
+    mobileImage: sangeetMobile,
+    webImage: sangeetWeb,
     dressCode: "Glitz & Glam / Tuxedo",
     side: ["dulha", "dulhan"],
   },
@@ -108,8 +113,8 @@ const EVENTS_DATA: Event[] = [
       <Calendar className="h-3 w-3 md:h-6 md:w-6 text-wedding-sindoor-600" />
     ),
     color: "sindoor",
-    mobileImage: couple3,
-    webImage: couple3,
+    mobileImage: shadiMobile,
+    webImage: shadiWeb,
     dressCode: "Your best attire",
     side: ["dulha", "dulhan"],
   },
@@ -123,8 +128,8 @@ const EVENTS_DATA: Event[] = [
       "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration. 🎩🥂",
     icon: <Users className="h-3 w-3 md:h-6 md:w-6 text-wedding-royal-600" />,
     color: "royal",
-    mobileImage: couple4,
-    webImage: couple4,
+    mobileImage: receptionMobile,
+    webImage: receptionWeb,
     dressCode: "Formal traditional or contemporary wear",
     side: ["dulha"],
   },
