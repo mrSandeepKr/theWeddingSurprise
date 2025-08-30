@@ -55,8 +55,8 @@ export default function OurStorySection() {
             Our Story
           </h2>
           <p className="text-lg text-rose-700 max-w-2xl mx-auto font-crimson">
-            Every love story is beautiful, but ours is our favorite. Here's how
-            our journey began and led us to this magical day.
+            If our love story were a movie, it would have comedy, drama, a dash of action, and of course… a blockbuster romance.
+            After all, every hero finds his heroine, and every song finds its perfect dance partner. ❤️
           </p>
           {/* Indian Wedding "Fluff" - Placeholder for decorative element */}
           <motion.div
@@ -105,12 +105,15 @@ export default function OurStorySection() {
                 And now...
               </h3>
               <p className="text-lg text-rose-700 italic leading-relaxed font-crimson mb-4">
-                "We're ready to say 'I do' and begin the greatest adventure of
-                our lives together. Thank you for being part of our story and
-                for joining us as we start this new chapter."
+                "The trailers are over, the interval is done, it’s time for the grand finale! 
+                We’re all set to say “I do” and begin the most exciting adventure of our lives. 
+                Thank you for dancing, laughing, and celebrating with us in this superhit journey. 💃🕺"
               </p>
-              <div className="mt-6 text-rose-800 font-semibold font-crimson">
-                With all our love, Sandeep & Payal
+              <div className="mt-6 text-rose-800 text-xl font-semibold font-crimson">
+                With all our love,
+              </div>
+              <div className="mt-2 text-rose-900 text-2xl font-semibold font-crimson">
+                Sandeep & Payal
               </div>
             </CardContent>
           </Card>

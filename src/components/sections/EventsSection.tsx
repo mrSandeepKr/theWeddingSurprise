@@ -10,11 +10,13 @@ import {
 } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import brideIcon from "@/assets/bride_icon.png";
 import groomIcon from "@/assets/groom_icon.png";
 import flowerTop from "@/assets/flower_top.png";
 import flowerLily from "@/assets/flower_lily.png";
-import couple1 from "@/assets/couple_1.webp";
+import haldiMobile from "@/assets/haldi_mobile.webp";
+import haldiWeb from "@/assets/haldi_web.webp";
 import couple2 from "@/assets/couple_2.webp";
 import couple3 from "@/assets/couple_3.webp";
 import couple4 from "@/assets/couple_4.webp";
@@ -33,7 +35,9 @@ interface Event {
   description: string;
   icon: JSX.Element;
   color: string;
-  image?: string;
+  image?: string; // Deprecated: kept for backward compatibility
+  mobileImage?: string; // New: specific image for mobile devices
+  webImage?: string; // New: specific image for web/desktop
   dressCode: string;
   side: ("dulha" | "dulhan")[]; // Changed to array
 }
@@ -54,11 +58,12 @@ const EVENTS_DATA: Event[] = [
     description:
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
     icon: (
-      <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-mehendi-600" />
+      <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-mehendi-600" />
     ),
     color: "mehendi",
-    image: couple5,
-    dressCode: "Bright traditional colors, comfortable for sitting",
+    mobileImage: couple5, // You can specify different images for mobile
+    webImage: couple5, // You can specify different images for web
+    dressCode: "Let's go green",
     side: ["dulhan"],
   },
   {
@@ -68,11 +73,12 @@ const EVENTS_DATA: Event[] = [
     venue: "Pool Side, Hill View Resort, Jamshedpur",
     address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
-      "Join us for the traditional Haldi ceremony filled with turmeric, laughter, and blessings. This sacred ritual marks the beginning of our wedding celebrations.",
-    icon: <Palette className="h-4 w-4 md:h-8 md:w-8 text-wedding-haldi-600" />,
+      "It’s not just haldi, it’s a phoolon ki haldi! 🌼✨ Come celebrate with us as we blend tradition with laughter, games, music, and a shower of blessings to begin our wedding journey on the happiest note. 💛",
+    icon: <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-haldi-600" />,
     color: "haldi",
-    image: couple1,
-    dressCode: "Bright colors, comfortable traditional wear",
+    mobileImage: haldiMobile,
+    webImage: haldiWeb,
+    dressCode: "Yellow yellow dirty fellow",
     side: ["dulha", "dulhan"],
   },
   {
@@ -82,11 +88,12 @@ const EVENTS_DATA: Event[] = [
     venue: "Pool Side, Hill View Resort, Jamshedpur",
     address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
-      "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories.",
-    icon: <Music className="h-4 w-4 md:h-8 md:w-8 text-wedding-magenta-600" />,
+      "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories. 💃✨",
+    icon: <Music className="h-3 w-3 md:h-6 md:w-6 text-wedding-magenta-600" />,
     color: "magenta",
-    image: couple2,
-    dressCode: "Festive attire, ready to dance!",
+    mobileImage: couple2,
+    webImage: couple2,
+    dressCode: "Glitz & Glam / Tuxedo",
     side: ["dulha", "dulhan"],
   },
   {
@@ -96,13 +103,14 @@ const EVENTS_DATA: Event[] = [
     venue: "Pool Side, Hill View Resort, Jamshedpur",
     address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
     description:
-      "The sacred ceremony where we exchange vows and begin our journey as one. Witness the union of two hearts in the presence of family and friends.",
+      "Under the stars and amidst blessings, we take our sacred vows and promise a lifetime together. Join us as two souls, two families, and two worlds unite in the most beautiful way. ❤️",
     icon: (
-      <Calendar className="h-4 w-4 md:h-8 md:w-8 text-wedding-sindoor-600" />
+      <Calendar className="h-3 w-3 md:h-6 md:w-6 text-wedding-sindoor-600" />
     ),
     color: "sindoor",
-    image: couple3,
-    dressCode: "Formal traditional or contemporary wear",
+    mobileImage: couple3,
+    webImage: couple3,
+    dressCode: "Your best attire",
     side: ["dulha", "dulhan"],
   },
   {
@@ -112,10 +120,11 @@ const EVENTS_DATA: Event[] = [
     venue: "Grand Celebration Hall",
     address: "Community Hall, Mecon Colony, Ranchi, Jharkhand",
     description:
-      "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration.",
-    icon: <Users className="h-4 w-4 md:h-8 md:w-8 text-wedding-royal-600" />,
+      "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration. 🎩🥂",
+    icon: <Users className="h-3 w-3 md:h-6 md:w-6 text-wedding-royal-600" />,
     color: "royal",
-    image: couple4,
+    mobileImage: couple4,
+    webImage: couple4,
     dressCode: "Formal traditional or contemporary wear",
     side: ["dulha"],
   },
@@ -295,59 +304,74 @@ const SectionHeader = ({ activeSegment }: { activeSegment: EventSide }) => {
   );
 };
 
-const EventCard = ({ event, index }: { event: Event; index: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, delay: index * 0.1 }}
-    className="group"
-  >
-    <Card
-      className={`${getColorClasses(event.color)} shadow-xl hover:shadow-2xl transition-all duration-500 border-2 overflow-hidden relative backdrop-blur-sm group-hover:scale-[1.02] transform-gpu`}
+const EventCard = ({ event, index }: { event: Event; index: number }) => {
+  const isMobile = useIsMobile();
+  
+  // Determine which image to use based on device type
+  const getEventImage = () => {
+    // Priority: mobileImage/webImage -> fallback to image -> null
+    if (isMobile && event.mobileImage) {
+      return event.mobileImage;
+    }
+    if (!isMobile && event.webImage) {
+      return event.webImage;
+    }
+    // Fallback to the original image property for backward compatibility
+    return event.image || null;
+  };
+  
+  const eventImage = getEventImage();
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="group"
     >
-      {/* Shine Effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
+      <Card
+        className={`${getColorClasses(event.color)} shadow-xl hover:shadow-2xl transition-all duration-500 border-2 overflow-hidden relative backdrop-blur-sm group-hover:scale-[1.02] transform-gpu`}
+      >
+        {/* Shine Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
 
-      <CardContent className="p-0">
-        <div className="flex flex-col lg:flex-row">
-          {/* Image Section */}
-          <div className="lg:w-1/3 relative overflow-hidden">
-            <div className="aspect-[4/3] lg:aspect-[3/4] relative">
-              {event.image ? (
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-wedding-gold-100 to-wedding-gold-200 flex items-center justify-center">
-                  <div className="p-1 md:p-6 bg-white/90 rounded-full shadow-lg">
-                    {event.icon}
-                  </div>
-                </div>
-              )}
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-            </div>
-          </div>
-
-          {/* Content Section - Made more compact for mobile */}
-          <div className="lg:w-2/3 p-4 sm:p-6 lg:p-10 flex flex-col justify-between">
-            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              {/* Header - Updated border with dynamic color */}
-              <div className="flex items-start justify-between flex-wrap gap-2 sm:gap-4">
-                <div className="flex items-center space-x-3 sm:space-x-5">
-                  <div
-                    className={`flex-shrink-0 p-2 sm:p-3 lg:p-4 bg-white/90 rounded-full shadow-lg border-2 ${getBorderColorClasses(event.color)} backdrop-blur-sm ${getIconColorClasses(event.color)}`}
-                  >
-                    <div className="w-4 h-4 sm:w-6 sm:h-6 lg:w-8 lg:h-8">
+        <CardContent className="p-0">
+          <div className="flex flex-col lg:flex-row">
+            {/* Image Section */}
+            <div className="aspect-[4/3] lg:aspect-[3/4] lg:w-1/3 relative overflow-hidden">
+                {eventImage ? (
+                  <img
+                    src={eventImage}
+                    alt={event.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-wedding-gold-100 to-wedding-gold-200 flex items-center justify-center">
+                    <div className="p-1 md:p-6 bg-white/90 rounded-full shadow-lg">
                       {event.icon}
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg sm:text-2xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
-                      {event.title}
-                    </h3>
+                )}
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />        
+            </div>
+
+            {/* Content Section - Made more compact for mobile */}
+            <div className="lg:w-2/3 p-4 sm:p-6 lg:p-10 flex flex-col gap-2 md:gap-4 lg:gap-6">
+              <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+                {/* Header - Updated border with dynamic color */}
+                <div className="flex items-start justify-between flex-wrap gap-2 sm:gap-4">
+                  <div className="flex items-center space-x-3 sm:space-x-5">
+                    <div
+                      className={` p-2 sm:p-3 lg:p-4 bg-white/90 rounded-full shadow-lg border-2 ${getBorderColorClasses(event.color)} backdrop-blur-sm ${getIconColorClasses(event.color)}`}
+                    >
+                      {event.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-2xl lg:text-4xl font-bold text-gray-800 font-['Playfair_Display'] leading-tight">
+                        {event.title}
+                      </h3>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -414,11 +438,11 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => (
               </div>
             </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
-  </motion.div>
-);
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 const EventsList = ({ events }: { events: Event[] }) => {
   if (events.length === 0) {
@@ -469,16 +493,6 @@ interface FlowerPosition {
   rotation: string; // Tailwind rotation classes
   hideOnMobile?: boolean;
 }
-
-const FLOWER_LILY_POSITIONS: FlowerPosition[] = [
-  {
-    id: "top-right",
-    position: "top-20 -right-4 md:top-32 md:right-8",
-    size: "w-[20%] md:w-[25%]",
-    opacity: "opacity-80",
-    rotation: "-rotate-75",
-  },
-];
 
 // ============================================================================
 // FLOWER DECORATION COMPONENTS
@@ -559,6 +573,7 @@ export default function EventsSection() {
           />
           <motion.div
             key={activeSegment}
+            className="p-4 md:p-6 lg:p-0"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
