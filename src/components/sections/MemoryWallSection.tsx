@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import Papa from 'papaparse';
 import memoryWallBg from '@/assets/memory_wall_background.jpeg';
 
@@ -196,11 +196,129 @@ function ModerationNotice() {
   );
 }
 
+// Pagination Component
+function PaginationControls({ 
+  currentPage, 
+  totalPages, 
+  onPageChange 
+}: { 
+  currentPage: number; 
+  totalPages: number; 
+  onPageChange: (page: number) => void; 
+}) {
+  if (totalPages <= 1) return null;
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
+  return (
+    <div className="flex items-center justify-center space-x-2 mt-12">
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </Button>
+      
+      {getPageNumbers().map((page, index) => (
+        page === '...' ? (
+          <span key={index} className="px-2 text-rose-400">...</span>
+        ) : (
+          <Button
+            key={index}
+            variant={currentPage === page ? "default" : "outline"}
+            size="sm"
+            onClick={() => onPageChange(page as number)}
+            className={currentPage === page 
+              ? "bg-rose-600 hover:bg-rose-700 text-white" 
+              : "border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300"
+            }
+          >
+            {page}
+          </Button>
+        )
+      ))}
+      
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+
+// Results Summary Component
+function ResultsSummary({ 
+  currentPage, 
+  totalPages, 
+  totalMemories, 
+  memoriesPerPage 
+}: { 
+  currentPage: number; 
+  totalPages: number; 
+  totalMemories: number; 
+  memoriesPerPage: number; 
+}) {
+  const startIndex = (currentPage - 1) * memoriesPerPage + 1;
+  const endIndex = Math.min(currentPage * memoriesPerPage, totalMemories);
+  
+  if (totalMemories === 0) return null;
+  
+  return (
+    <div className="text-center mb-8">
+      <p className="text-rose-600 text-sm">
+        Showing {startIndex}-{endIndex} of {totalMemories} memories
+      </p>
+    </div>
+  );
+}
+
 // Main Component
 export default function MemoryWallSection() {
   const [memories, setMemories] = useState<MessageStruct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const memoriesPerPage = 7
+  const totalPages = Math.ceil(memories.length / memoriesPerPage);
+  const startIndex = (currentPage - 1) * memoriesPerPage;
+  const endIndex = startIndex + memoriesPerPage;
+  const currentMemories = memories.slice(startIndex, endIndex);
 
   // Function to convert Google Drive URL to viewable format
   const convertGoogleDriveUrl = (urlString: string): string => {
@@ -320,6 +438,21 @@ export default function MemoryWallSection() {
     fetchMemories();
   }, []);
 
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Smooth scroll to top of memory wall section
+    document.getElementById('memory-wall')?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
+  // Reset to page 1 when memories change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [memories.length]);
+
   if (loading) {
     return <LoadingState />;
   }
@@ -331,7 +464,7 @@ export default function MemoryWallSection() {
   return (
     <section id="memory-wall" className="relative py-20 px-6 bg-white overflow-hidden">
       {/* Background Image with Blur Effect */}
-      <div className="absolute h-96 inset-0 w-full">
+        <div className="absolute h-96 inset-0 w-full">
         <div 
           className="w-full h-96 bg-cover bg-center bg-no-repeat"
           style={{
@@ -352,13 +485,29 @@ export default function MemoryWallSection() {
       <div className="relative z-10 max-w-4xl mx-auto">
         <MemoryWallHeader />
 
+        {memories.length > 0 && (
+          <ResultsSummary 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalMemories={memories.length}
+            memoriesPerPage={memoriesPerPage}
+          />
+        )}
+
         <div className="space-y-6">
-          {memories.map((memory) => (
+          {currentMemories.map((memory) => (
             <MemoryCard key={memory.id} memory={memory} />
           ))}
         </div>
 
         {memories.length === 0 && <EmptyState />}
+        
+        <PaginationControls 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+        
         <ModerationNotice />
       </div>
     </section>
