@@ -10,9 +10,9 @@ const loadImage = (imageName: string) => {
 
 // Image metadata for dynamic loading
 const IMAGE_METADATA = {
-  couple: Array.from({ length: 24 }, (_, i) => `couple_${i + 1}`),
+  couple: Array.from({ length: 22 }, (_, i) => `couple_${i + 1}`),
   family: Array.from({ length: 7 }, (_, i) => `family_${i + 1}`),
-  preWedding: ["pre_wedding_1", "pre_wedding_2"],
+  preWedding: Array.from({ length: 1 }, (_, i) => `pre_wedding_${i + 1}`),
 };
 
 interface MasterImage {

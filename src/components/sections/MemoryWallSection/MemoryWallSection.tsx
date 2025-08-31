@@ -221,8 +221,6 @@ export default function MemoryWallSection() {
         },
       );
 
-      console.log(transformedMemories);
-
       setMemories(transformedMemories);
       setError(null);
     } catch (err) {
