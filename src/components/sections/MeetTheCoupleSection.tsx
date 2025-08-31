@@ -21,24 +21,12 @@ interface PersonInfo {
 // Section Header Component
 function SectionHeader({ isInView }: { isInView: boolean }) {
   return (
-    <div className="text-center mb-16">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="inline-flex items-center gap-2 mb-4"
-      >
-        <Heart className="h-6 w-6 text-rose-600" />
-        <span className="text-rose-600 font-medium tracking-wider uppercase text-sm">
-          Our Love Story
-        </span>
-        <Heart className="h-6 w-6 text-rose-600" />
-      </motion.div>
+    <div className="mt-4 text-center mb-16">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
+        className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair"
       >
         Meet the Bride and Groom
       </motion.h2>
