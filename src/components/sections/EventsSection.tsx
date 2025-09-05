@@ -57,9 +57,9 @@ const EVENTS_DATA: Event[] = [
   {
     title: "Mehendi Ceremony",
     date: "February 3, 2026",
-    time: "2:00 PM - 6:00 PM",
-    venue: "Bride's Family Home",
-    address: "Some place, Jamshedpur",
+    time: "4:00 PM tonwards",
+    venue: "Celebration Banquet Hall",
+    address: "Jamshedpur",
     description:
       "A beautiful afternoon of intricate henna designs, laughter, and bonding with the bride's side of the family.",
     icon: (
@@ -75,8 +75,8 @@ const EVENTS_DATA: Event[] = [
     title: "Haldi Ceremony",
     date: "February 4, 2026",
     time: "12:00 AM - 2:00 PM",
-    venue: "Pool Side, Hill View Resort, Jamshedpur",
-    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
+    venue: "Pool Side, Hill View Resort",
+    address: "Jamshedpur",
     description:
       "It’s not just haldi, it’s a phoolon ki haldi! 🌼✨ Come celebrate with us as we blend tradition with laughter, games, music, and a shower of blessings to begin our wedding journey on the happiest note. 💛",
     icon: <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-haldi-600" />,
@@ -90,8 +90,8 @@ const EVENTS_DATA: Event[] = [
     title: "Sangeet Night",
     date: "February 4, 2026",
     time: "7:00 PM - 11:00 PM",
-    venue: "Pool Side, Hill View Resort, Jamshedpur",
-    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
+    venue: "Hill View Resort",
+    address: "Jamshedpur",
     description:
       "Dance the night away as both families come together for music and performances. An evening filled with joy, laughter, and unforgettable memories. 💃✨",
     icon: <Music className="h-3 w-3 md:h-6 md:w-6 text-wedding-magenta-600" />,
@@ -105,8 +105,8 @@ const EVENTS_DATA: Event[] = [
     title: "Wedding Ceremony",
     date: "February 5, 2026",
     time: "7:00 PM - 12:00 AM",
-    venue: "Pool Side, Hill View Resort, Jamshedpur",
-    address: "V5HQ+46J, NH 18, Asan Bani, Jharkhand 832401",
+    venue: "Hill View Resort",
+    address: "Jamshedpur",
     description:
       "Under the stars and amidst blessings, we take our sacred vows and promise a lifetime together. Join us as two souls, two families, and two worlds unite in the most beautiful way. ❤️",
     icon: (
@@ -122,8 +122,8 @@ const EVENTS_DATA: Event[] = [
     title: "Reception Dinner",
     date: "February 7, 2026",
     time: "7:00 PM - 12:00 AM",
-    venue: "Grand Celebration Hall",
-    address: "Community Hall, Mecon Colony, Ranchi, Jharkhand",
+    venue: "Community Hall, Mecon Colony",
+    address: "Ranchi",
     description:
       "Celebrate with us over dinner, dancing, and creating beautiful memories. An elegant evening of fine dining and joyous celebration. 🎩🥂",
     icon: <Users className="h-3 w-3 md:h-6 md:w-6 text-wedding-royal-600" />,
