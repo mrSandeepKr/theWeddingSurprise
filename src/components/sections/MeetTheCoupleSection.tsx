@@ -25,7 +25,7 @@ function SectionHeader({ isInView }: { isInView: boolean }) {
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
+        transition={{ duration: 0.2 }}
         className="text-4xl md:text-5xl font-bold text-rose-800 mb-6 font-playfair"
       >
         Meet the Bride and Groom
@@ -33,7 +33,7 @@ function SectionHeader({ isInView }: { isInView: boolean }) {
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.2 }}
         className="text-lg text-gray-600 max-w-2xl mx-auto"
       >
         Two hearts, one beautiful journey. Get to know the happy couple who are about to begin their forever together.
@@ -70,7 +70,7 @@ function PersonImage({
           ? { opacity: 1, x: 0 }
           : { opacity: 0, x: index === 0 ? -50 : 50 }
       }
-      transition={{ duration: 0.6, delay: 0.5 + index * 0.2 }}
+      transition={{ duration: 0.4, delay: 0.2 + index * 0.2 }}
       className="relative h-[600px] md:h-[700px] overflow-hidden rounded-2xl shadow-2xl group"
     >
       {/* Background Image */}
@@ -89,7 +89,7 @@ function PersonImage({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
+          transition={{ duration: 0.2, delay: 0.3 + index * 0.1 }}
           className="mb-6"
         >
           <h3 className="text-4xl md:text-5xl font-bold text-white mb-2">
@@ -104,7 +104,7 @@ function PersonImage({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+          transition={{ duration: 0.2, delay: 0.4 + index * 0.1 }}
           className="mb-6"
         >
           <p className="text-white/90 leading-relaxed text-base md:text-lg max-w-md">
@@ -116,7 +116,7 @@ function PersonImage({
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.9 + index * 0.1 }}
+          transition={{ duration: 0.2, delay: 0.6 + index * 0.1 }}
           className="space-y-2"
         >
           {person.details.map((detail, detailIndex) => (
@@ -164,7 +164,7 @@ export default function MeetTheCoupleSection() {
         className="max-w-7xl mx-auto"
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.2 }}
       >
         <SectionHeader isInView={isInView} />
         
