@@ -7,6 +7,7 @@ import {
   Music,
   Users,
   Shirt,
+  Navigation,
 } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
@@ -45,6 +46,7 @@ interface Event {
   webImage?: string; // New: specific image for web/desktop
   dressCode: string;
   side: ("dulha" | "dulhan")[]; // Changed to array
+  locationUrl?: string; // New: Google Maps URL
 }
 
 type EventSide = "dulha" | "dulhan"; // Removed 'both'
@@ -66,10 +68,11 @@ const EVENTS_DATA: Event[] = [
       <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-mehendi-600" />
     ),
     color: "mehendi",
-    mobileImage: mehendiMobile, // You can specify different images for mobile
-    webImage: mehendiWeb, // You can specify different images for web
+    mobileImage: mehendiMobile,
+    webImage: mehendiWeb,
     dressCode: "Let's go green",
     side: ["dulhan"],
+    locationUrl: "https://maps.app.goo.gl/BrJhTvjgvBbEiNgb9",
   },
   {
     title: "Haldi Ceremony",
@@ -78,13 +81,14 @@ const EVENTS_DATA: Event[] = [
     venue: "Pool Side, Hill View Resort",
     address: "Jamshedpur",
     description:
-      "It’s not just haldi, it’s a phoolon ki haldi! 🌼✨ Come celebrate with us as we blend tradition with laughter, games, music, and a shower of blessings to begin our wedding journey on the happiest note. 💛",
+      "It's not just haldi, it's a phoolon ki haldi! 🌼✨ Come celebrate with us as we blend tradition with laughter, games, music, and a shower of blessings to begin our wedding journey on the happiest note. 💛",
     icon: <Palette className="h-3 w-3 md:h-6 md:w-6 text-wedding-haldi-600" />,
     color: "haldi",
     mobileImage: haldiMobile,
     webImage: haldiWeb,
     dressCode: "Yellow yellow dirty fellow",
     side: ["dulha", "dulhan"],
+    locationUrl: "https://maps.app.goo.gl/NVauwEkZBUJPrWCf6",
   },
   {
     title: "Sangeet Night",
@@ -100,6 +104,7 @@ const EVENTS_DATA: Event[] = [
     webImage: sangeetWeb,
     dressCode: "Glitz & Glam / Tuxedo",
     side: ["dulha", "dulhan"],
+    locationUrl: "https://maps.app.goo.gl/NVauwEkZBUJPrWCf6",
   },
   {
     title: "Wedding Ceremony",
@@ -117,6 +122,7 @@ const EVENTS_DATA: Event[] = [
     webImage: shadiWeb,
     dressCode: "Your best attire",
     side: ["dulha", "dulhan"],
+    locationUrl: "https://maps.app.goo.gl/NVauwEkZBUJPrWCf6",
   },
   {
     title: "Reception Dinner",
@@ -132,6 +138,7 @@ const EVENTS_DATA: Event[] = [
     webImage: receptionWeb,
     dressCode: "Formal traditional or contemporary wear",
     side: ["dulha"],
+    locationUrl: "https://maps.app.goo.gl/x1X4n4FYEsyKQ7Qe6",
   },
 ];
 
@@ -159,7 +166,6 @@ const getColorClasses = (color: string): string => {
   );
 };
 
-// Add this new function after the getColorClasses function
 const getBorderColorClasses = (color: string): string => {
   const borderColorMap = {
     haldi: "border-wedding-haldi-300",
@@ -186,6 +192,21 @@ const getIconColorClasses = (color: string): string => {
   return (
     iconColorMap[color as keyof typeof iconColorMap] ||
     "text-wedding-sindoor-700"
+  );
+};
+
+// Add this new function after getIconColorClasses
+const getDarkBackgroundClasses = (color: string): string => {
+  const darkBackgroundMap = {
+    haldi: "bg-wedding-haldi-800 hover:bg-wedding-haldi-900",
+    mehendi: "bg-wedding-mehendi-800 hover:bg-wedding-mehendi-900",
+    magenta: "bg-wedding-magenta-800 hover:bg-wedding-magenta-900",
+    sindoor: "bg-wedding-sindoor-800 hover:bg-wedding-sindoor-900",
+    royal: "bg-wedding-royal-800 hover:bg-wedding-royal-900",
+  };
+  return (
+    darkBackgroundMap[color as keyof typeof darkBackgroundMap] ||
+    "bg-wedding-sindoor-800 hover:bg-wedding-sindoor-900"
   );
 };
 
@@ -402,20 +423,35 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => {
               </div>
 
               {/* Venue - Updated icon with dynamic color */}
-              <div className="flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
-                <MapPin
-                  className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`}
-                />
-                <div>
-                  <div className="font-bold font-['Poppins'] text-gray-800 text-xs sm:text-sm lg:text-lg">
-                    {event.venue}
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-600 font-['Poppins'] mt-0.5 sm:mt-1">
-                    {event.address}
+              <div className="flex items-start justify-between">
+                <div className="flex-1 flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm">
+                  <MapPin
+                    className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 sm:mr-3 lg:mr-4 mt-0.5 sm:mt-1 flex-shrink-0 ${getIconColorClasses(event.color)}`}
+                  />
+                  <div className="flex-1">
+                    <div className="font-bold font-['Poppins'] text-gray-800 text-xs sm:text-sm lg:text-lg">
+                      {event.venue}
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-600 font-['Poppins'] mt-0.5 sm:mt-1">
+                      {event.address}
+                    </div>
                   </div>
                 </div>
-              </div>
 
+                {/* Hide navigation button on mobile, show only on large screens */}
+                {event.locationUrl && (
+                  <div className={`ml-2 hidden lg:flex items-center justify-center flex-shrink-0 w-12 sm:w-14 lg:w-16 h-full`}>
+                    <button
+                      onClick={() => window.open(event.locationUrl, '_blank')}
+                      className={`transition-all duration-300 w-12 sm:w-14 lg:w-16 h-12 sm:h-14 lg:h-16 flex items-center justify-center bg-white/60 rounded-xl shadow-md hover:shadow-lg border-2 ${getBorderColorClasses(event.color)}`}
+                      title="Open in Google Maps"
+                    >
+                      <Navigation className={`h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 ${getIconColorClasses(event.color)} group-hover/btn:scale-110 transition-transform duration-200`} />
+                    </button>
+                  </div>
+                )}
+              </div>
+              
               {/* Dress Code - Updated border and icon with dynamic colors */}
               <div
                 className={`flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm border ${getBorderColorClasses(event.color)}`}
@@ -441,6 +477,17 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => {
                   {event.description}
                 </p>
               </div>
+
+              {/* Mobile Get Direction Button - Only show on mobile */}
+              {event.locationUrl && isMobile && (
+                <button
+                  onClick={() => window.open(event.locationUrl, '_blank')}
+                  className={`w-full mt-2 py-3 px-4 rounded-xl text-white font-semibold font-['Poppins'] text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center gap-2 ${getDarkBackgroundClasses(event.color)}`}
+                >
+                  <Navigation className="h-4 w-4" />
+                  Get Direction
+                </button>
+              )}
             </div>
           </div>
         </CardContent>
