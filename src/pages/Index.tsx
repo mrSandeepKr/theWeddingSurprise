@@ -54,7 +54,7 @@ function SectionLoader({ height = "h-96" }: { height?: string }) {
 
 export default function WeddingInvitation() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 overflow-x-hidden">
       <Navbar />
       <HeroSection />
 

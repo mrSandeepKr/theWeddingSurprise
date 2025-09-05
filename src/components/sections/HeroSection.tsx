@@ -15,20 +15,15 @@ const preloadImage = (src: string) => {
 };
 
 export default function HeroSection() {
-  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-
   useEffect(() => {
     // Preload critical assets
     const loadAssets = async () => {
       try {
         await preloadImage(heroImage);
-        setHeroImageLoaded(true);
       } catch (error) {
         console.warn("Failed to preload hero assets:", error);
-        setHeroImageLoaded(true); // Fallback
       }
     };
-
     loadAssets();
   }, []);
 
@@ -38,12 +33,12 @@ export default function HeroSection() {
       className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
     >
       {/* Hero Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        <div className="absolute inset-0 bg-black/40"></div>
-      </div>
+      <img
+        src={heroImage}
+        alt="Wedding Hero Background"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-black/40"></div>
 
       <motion.div
         className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-32"

@@ -55,22 +55,24 @@ function PersonDetailItem({ detail }: { detail: PersonDetail }) {
 // Person Image Component
 function PersonImage({ 
   person, 
-  index, 
-  isInView 
+  index
 }: { 
   person: PersonInfo; 
-  index: number; 
-  isInView: boolean; 
+  index: number;
 }) {
+  const cardRef = useRef(null);
+  const isCardInView = useInView(cardRef, { once: true, margin: "-100px 0px" });
+
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, x: index === 0 ? -50 : 50 }}
       animate={
-        isInView
+        isCardInView
           ? { opacity: 1, x: 0 }
           : { opacity: 0, x: index === 0 ? -50 : 50 }
       }
-      transition={{ duration: 0.4, delay: 0.2 + index * 0.2 }}
+      transition={{ duration: 0.4, delay: 0.2 }}
       className="relative h-[600px] md:h-[700px] overflow-hidden rounded-2xl shadow-2xl group"
     >
       {/* Background Image */}
@@ -88,8 +90,8 @@ function PersonImage({
         {/* Name and Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.2, delay: 0.3 + index * 0.1 }}
+          animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.2, delay: 0.3 }}
           className="mb-6"
         >
           <h3 className="text-4xl md:text-5xl font-bold text-white mb-2">
@@ -103,8 +105,8 @@ function PersonImage({
         {/* Description */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.2, delay: 0.4 + index * 0.1 }}
+          animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.2, delay: 0.4 }}
           className="mb-6"
         >
           <p className="text-white/90 leading-relaxed text-base md:text-lg max-w-md">
@@ -115,8 +117,8 @@ function PersonImage({
         {/* Details */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.2, delay: 0.6 + index * 0.1 }}
+          animate={isCardInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.2, delay: 0.6 }}
           className="space-y-2"
         >
           {person.details.map((detail, detailIndex) => (
@@ -174,8 +176,7 @@ export default function MeetTheCoupleSection() {
             <PersonImage 
               key={person.name}
               person={person} 
-              index={index} 
-              isInView={isInView} 
+              index={index}
             />
           ))}
         </div>

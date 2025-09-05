@@ -10,7 +10,7 @@ const loadImage = (imageName: string) => {
 
 // Image metadata for dynamic loading
 const IMAGE_METADATA = {
-  couple: Array.from({ length: 22 }, (_, i) => `couple_${i + 1}`),
+  couple: Array.from({ length: 21 }, (_, i) => `couple_${i + 1}`),
   family: Array.from({ length: 7 }, (_, i) => `family_${i + 1}`),
   preWedding: Array.from({ length: 1 }, (_, i) => `pre_wedding_${i + 1}`),
 };
@@ -168,10 +168,11 @@ export default function GallerySection() {
   }, []);
 
   const filteredImages = masterImages.filter((image) => {
-    if (activeCategory === "all") return image.loaded;
+    if (activeCategory === "all") {
+      return image.loaded && image.category !== "preWedding";
+    }
     return activeCategory === image.category && image.loaded;
   });
-
   const handleImageClick = (imageSrc: string) => {
     setSelectedImage(imageSrc);
   };
@@ -231,16 +232,28 @@ export default function GallerySection() {
         />
 
         <Suspense fallback={<LoadingSpinner />}>
-          <LazyGalleryCarousel
-            images={filteredImages}
-            imageErrors={imageErrors}
-            imageLoading={imageLoading}
-            onImageClick={handleImageClick}
-            onImageLoadStart={handleImageLoadStart}
-            onImageLoad={handleImageLoad}
-            onImageError={handleImageError}
-            autoplay={autoplay}
-          />
+          {filteredImages.length === 1 ? (
+            <SingleImageDisplay
+              image={filteredImages[0]}
+              imageLoading={imageLoading}
+              onImageClick={handleImageClick}
+              onImageLoadStart={handleImageLoadStart}
+              onImageLoad={handleImageLoad}
+              onImageError={handleImageError}
+            />
+          ) : (
+            // Multiple images - show carousel
+            <LazyGalleryCarousel
+              images={filteredImages}
+              imageErrors={imageErrors}
+              imageLoading={imageLoading}
+              onImageClick={handleImageClick}
+              onImageLoadStart={handleImageLoadStart}
+              onImageLoad={handleImageLoad}
+              onImageError={handleImageError}
+              autoplay={autoplay}
+            />
+          )}
         </Suspense>
 
         {selectedImage && (
@@ -253,5 +266,44 @@ export default function GallerySection() {
         )}
       </div>
     </section>
+  );
+}
+
+// Single Image Display Component
+interface SingleImageDisplayProps {
+  image: MasterImage;
+  imageLoading: Set<string>;
+  onImageClick: (imageSrc: string) => void;
+  onImageLoadStart: (imageSrc: string) => void;
+  onImageLoad: (imageSrc: string) => void;
+  onImageError: (imageSrc: string) => void;
+}
+
+function SingleImageDisplay({
+  image,
+  imageLoading,
+  onImageClick,
+  onImageLoadStart,
+  onImageLoad,
+  onImageError,
+}: SingleImageDisplayProps) {
+  return (
+    <div className="flex justify-center items-center min-h-[60vh] py-8">
+      <div className="relative max-w-2xl w-full">
+        <img
+          src={image.image}
+          alt="Gallery image"
+          className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-lg cursor-pointer transition-transform hover:scale-105"
+          onLoadStart={() => onImageLoadStart(image.image)}
+          onLoad={() => onImageLoad(image.image)}
+          onError={() => onImageError(image.image)}
+        />
+        {imageLoading.has(image.image) && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
+            <LoadingSpinner />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
