@@ -55,7 +55,7 @@ function MemoryCardAvatar({
   return (
     <Avatar className={`${isMobile ? "h-10 w-10" : "h-12 w-12"} flex-shrink-0`}>
       {memory.thumbnailPic ? (
-        <AvatarImage src={memory.thumbnailPic} alt={memory.name} />
+        <AvatarImage src={memory.thumbnailPic} alt={memory.name} className="object-cover" />
       ) : null}
       <AvatarFallback className="bg-rose-100 text-rose-600 font-semibold">
         {memory.name
