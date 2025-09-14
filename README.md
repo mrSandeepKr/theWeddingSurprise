@@ -1,61 +1,23 @@
-# Shadcn-UI Template Usage Instructions
+# Welcome to Our Wedding Project
 
-## technology stack
+## Aesthetic and Clean Code
 
-This project is built with:
+In this project, we embrace the beauty of clean code and stunning visuals. Our goal is to create an experience that is not only functional but also a delight to the eyes. We believe that code should be as elegant as the design it supports.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Visual Experience
 
-All shadcn/ui components have been downloaded under `@/components/ui`.
+This project is crafted with a focus on aesthetics. We use modern design principles to ensure that every component is visually appealing and contributes to a cohesive look and feel. Our design choices are guided by simplicity and elegance, making sure that every element serves a purpose and enhances the overall experience.
 
-## File Structure
+## Key Features
 
-- `index.html` - HTML entry point
-- `vite.config.ts` - Vite configuration file
-- `tailwind.config.js` - Tailwind CSS configuration file
-- `package.json` - NPM dependencies and scripts
-- `src/app.tsx` - Root component of the project
-- `src/main.tsx` - Project entry point
-- `src/index.css` - Existing CSS configuration
+- **Elegant Design**: Every component is designed with attention to detail, ensuring a seamless and beautiful user experience.
+- **Clean Code**: We prioritize writing clean, maintainable code that is easy to understand and extend.
+- **Responsive Layout**: Our design is fully responsive, ensuring that it looks great on all devices.
 
-## Components
+## Join Us on This Journey
 
-- All shadcn/ui components are pre-downloaded and available at `@/components/ui`
+We invite you to explore our project and see how we blend clean code with beautiful design. Whether you're a developer or a designer, there's something here for you to appreciate. Let's create something beautiful together! 
 
-## Styling
+---
 
-- Add global styles to `src/index.css` or create new CSS files as needed
-- Use Tailwind classes for styling components
-
-## Development
-
-- Import components from `@/components/ui` in your React components
-- Customize the UI by modifying the Tailwind configuration
-
-## Note
-
-The `@/` path alias points to the `src/` directory
-
-# Commands
-
-**Install Dependencies**
-
-```shell
-pnpm i
-```
-
-**Start Preview**
-
-```shell
-pnpm run dev
-```
-
-**To build**
-
-```shell
-pnpm run build
-```
+Feel free to reach out if you have any questions or suggestions. We're excited to share this journey with you!
