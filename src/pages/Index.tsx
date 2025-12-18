@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/sections/HeroSection";
-import { Heart } from "lucide-react";
 
 // Lazy load sections with better loading boundaries
 const MeetTheCoupleSection = lazy(() =>
@@ -34,6 +33,12 @@ const MemoryWallSection = lazy(() =>
       default: module.default,
     }),
   ),
+);
+
+const FooterSection = lazy(() =>
+  import("@/components/sections/FooterSection").then((module) => ({
+    default: module.default,
+  })),
 );
 
 // Enhanced loading component
@@ -78,19 +83,9 @@ export default function WeddingInvitation() {
         <MemoryWallSection />
       </Suspense>
 
-      {/* Footer */}
-      <footer className="py-12 text-center bg-rose-800 text-rose-100">
-        <div className="space-y-4">
-          <Heart className="h-8 w-8 mx-auto text-rose-300" />
-          <p className="text-lg">Looking forward to celebrating with you!</p>
-          <p className="text-sm opacity-75">
-            Sandeep & Payal • February 5th, 2026
-          </p>
-          <div className="text-xs opacity-60 mt-4">
-            <p>Made with ❤️ for our special day</p>
-          </div>
-        </div>
-      </footer>
+      <Suspense fallback={<SectionLoader height="h-96" />}>
+        <FooterSection />
+      </Suspense>
     </div>
   );
 }

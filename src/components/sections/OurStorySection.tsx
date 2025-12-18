@@ -31,7 +31,7 @@ export default function OurStorySection() {
       title: "The Proposal",
       date: "Dec 2025",
       description:
-        "So she said yes, I proposed to her on 14th Dec at Varca Beach - It was the first surprise I had every planned, and as expected from me I did it perfectly. XD",
+        "So she said yes, I proposed to her on 14th Dec at Varca Beach - It was the first surprise I had ever planned, and as expected from me I did it perfectly. XD",
     },
   ];
 
