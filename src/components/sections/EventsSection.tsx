@@ -77,7 +77,7 @@ const EVENTS_DATA: Event[] = [
   {
     title: "Haldi Ceremony",
     date: "February 4, 2026",
-    time: "12:00 AM - 2:00 PM",
+    time: "12:00 PM - 2:00 PM",
     venue: "Pool Side, Hill View Resort",
     address: "Jamshedpur",
     description:

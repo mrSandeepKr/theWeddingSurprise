@@ -29,9 +29,9 @@ export default function OurStorySection() {
     {
       icon: <Gem className="h-8 w-8 text-rose-600" />,
       title: "The Proposal",
-      date: "TBD",
+      date: "Dec 2025",
       description:
-        "She will kill the person building the website if he doesn't propose. He has all the intentions to just not getting a chance :)",
+        "So she said yes, I proposed to her on 14th Dec at Varca Beach - It was the first surprise I had every planned, and as expected from me I did it perfectly. XD",
     },
   ];
 

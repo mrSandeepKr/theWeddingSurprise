@@ -12,7 +12,7 @@ const loadImage = (imageName: string) => {
 const IMAGE_METADATA = {
   couple: Array.from({ length: 21 }, (_, i) => `couple_${i + 1}`),
   family: Array.from({ length: 8 }, (_, i) => `family_${i + 1}`),
-  preWedding: Array.from({ length: 1 }, (_, i) => `pre_wedding_${i + 1}`),
+  preWedding: Array.from({ length: 14 }, (_, i) => `pre_wedding_${i + 1}`),
 };
 
 interface MasterImage {
@@ -169,7 +169,7 @@ export default function GallerySection() {
 
   const filteredImages = masterImages.filter((image) => {
     if (activeCategory === "all") {
-      return image.loaded && image.category !== "preWedding";
+      return image.loaded;
     }
     return activeCategory === image.category && image.loaded;
   });
