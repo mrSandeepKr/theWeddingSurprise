@@ -16,7 +16,7 @@ export default function FooterSection() {
   }, []);
 
   return (
-    <footer className="relative py-24 text-center text-rose-100 overflow-hidden">
+    <footer className="relative py-24 lg:py-32 xl:py-40 text-center text-rose-100 overflow-hidden bg-rose-800">
       {/* Video Background */}
       <video
         ref={videoRef}
@@ -30,13 +30,13 @@ export default function FooterSection() {
       </video>
 
       {/* Content */}
-      <div className="relative z-10 space-y-4">
-        <Heart className="h-8 w-8 mx-auto text-rose-300" />
-        <p className="text-lg">Looking forward to celebrating with you!</p>
-        <p className="text-sm opacity-75">
+      <div className="relative z-10 space-y-4 lg:space-y-6 px-4 lg:px-8">
+        <Heart className="h-8 w-8 lg:h-12 lg:w-12 mx-auto text-rose-300" />
+        <p className="text-lg lg:text-2xl xl:text-3xl">Looking forward to celebrating with you!</p>
+        <p className="text-sm lg:text-base xl:text-lg opacity-75">
           Sandeep & Payal • February 5th, 2026
         </p>
-        <div className="text-xs opacity-60 mt-4">
+        <div className="text-xs lg:text-sm opacity-60 mt-4">
           <p>Made with ❤️ for our special day</p>
         </div>
       </div>
