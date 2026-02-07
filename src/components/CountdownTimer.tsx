@@ -2,7 +2,7 @@ import FlipClockCountdown from "@leenguyen/react-flip-clock-countdown";
 import "@leenguyen/react-flip-clock-countdown/dist/index.css";
 
 export default function CountdownTimer() {
-  const weddingDate = new Date("2026-02-05T00:00:00").getTime();
+  const weddingDate = new Date("2026-04-19T00:00:00").getTime();
 
   return (
     <div className="flex justify-center items-center w-full overflow-hidden">

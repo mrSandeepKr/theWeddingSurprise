@@ -58,7 +58,7 @@ type EventSide = "dulha" | "dulhan"; // Removed 'both'
 const EVENTS_DATA: Event[] = [
   {
     title: "Mehendi Ceremony",
-    date: "February 3, 2026",
+    date: "April 17, 2026",
     time: "4:00 PM tonwards",
     venue: "Celebration Banquet Hall",
     address: "Jamshedpur",
@@ -76,7 +76,7 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Haldi Ceremony",
-    date: "February 4, 2026",
+    date: "April 18, 2026",
     time: "12:00 PM - 2:00 PM",
     venue: "Pool Side, Hill View Resort",
     address: "Jamshedpur",
@@ -92,7 +92,7 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Sangeet Night",
-    date: "February 4, 2026",
+    date: "April 18, 2026",
     time: "7:00 PM - 11:00 PM",
     venue: "Hill View Resort",
     address: "Jamshedpur",
@@ -108,7 +108,7 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Wedding Ceremony",
-    date: "February 5, 2026",
+    date: "April 19, 2026",
     time: "7:00 PM - 12:00 AM",
     venue: "Hill View Resort",
     address: "Jamshedpur",
@@ -126,7 +126,7 @@ const EVENTS_DATA: Event[] = [
   },
   {
     title: "Reception Dinner",
-    date: "February 7, 2026",
+    date: "April 22, 2026",
     time: "7:00 PM - 12:00 AM",
     venue: "Community Hall, Mecon Colony",
     address: "Ranchi",
@@ -241,18 +241,16 @@ const SegmentedControl = ({
           {/* Dulha (Groom) */}
           <button
             onClick={() => onSegmentChange("dulha")}
-            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
-              activeSegment === "dulha"
-                ? "text-white font-semibold"
-                : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
-            }`}
+            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${activeSegment === "dulha"
+              ? "text-white font-semibold"
+              : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
+              }`}
           >
             <img
               src={groomIcon}
               alt="Groom"
-              className={`w-6 h-6 mr-3 transition-all duration-300 ${
-                activeSegment === "dulha" ? "brightness-0 invert" : "opacity-70"
-              }`}
+              className={`w-6 h-6 mr-3 transition-all duration-300 ${activeSegment === "dulha" ? "brightness-0 invert" : "opacity-70"
+                }`}
             />
             <span className="font-['Poppins'] font-medium text-lg">Dulha</span>
           </button>
@@ -260,20 +258,18 @@ const SegmentedControl = ({
           {/* Dulhan (Bride) */}
           <button
             onClick={() => onSegmentChange("dulhan")}
-            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${
-              activeSegment === "dulhan"
-                ? "text-white font-semibold"
-                : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
-            }`}
+            className={`relative flex items-center justify-center px-6 py-4 rounded-xl transition-all duration-300 min-w-[140px] ${activeSegment === "dulhan"
+              ? "text-white font-semibold"
+              : "text-wedding-sindoor-700 hover:text-wedding-sindoor-800"
+              }`}
           >
             <img
               src={brideIcon}
               alt="Bride"
-              className={`w-6 h-6 mr-3 transition-all duration-300 ${
-                activeSegment === "dulhan"
-                  ? "brightness-0 invert"
-                  : "opacity-70"
-              }`}
+              className={`w-6 h-6 mr-3 transition-all duration-300 ${activeSegment === "dulhan"
+                ? "brightness-0 invert"
+                : "opacity-70"
+                }`}
             />
             <span className="font-['Poppins'] font-medium text-lg">Dulhan</span>
           </button>
@@ -451,7 +447,7 @@ const EventCard = ({ event, index }: { event: Event; index: number }) => {
                   </div>
                 )}
               </div>
-              
+
               {/* Dress Code - Updated border and icon with dynamic colors */}
               <div
                 className={`flex items-start text-gray-700 font-['Poppins'] bg-white/60 rounded-xl p-2.5 sm:p-3 lg:p-4 backdrop-blur-sm shadow-sm border ${getBorderColorClasses(event.color)}`}

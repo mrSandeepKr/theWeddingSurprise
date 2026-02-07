@@ -21,3 +21,52 @@ We invite you to explore our project and see how we blend clean code with beauti
 ---
 
 Feel free to reach out if you have any questions or suggestions. We're excited to share this journey with you!
+
+## How to Run the Project
+
+To get started with the project locally, follow these steps:
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Build for Production**:
+   ```bash
+   npm run build
+   ```
+
+4. **Preview Production Build**:
+   ```bash
+   npm run preview
+   ```
+
+## Deployment to Hostinger
+
+To deploy this project to Hostinger, follow these instructions:
+
+1. **Build the Project**:
+   Run the build command to generate a production-ready `dist` folder:
+   ```bash
+   npm run build
+   ```
+
+2. **Prepare for Upload**:
+   The build process will create a `dist` directory in your project root. This directory contains all the static assets (HTML, CSS, JS, images, videos) needed for the website.
+
+3. **Upload to Hostinger**:
+   - Log in to your **Hostinger hPanel**.
+   - Navigate to **Files** > **File Manager**.
+   - Go to the `public_html` directory of your domain.
+   - **Upload** all the files and folders inside the `dist` directory (not the `dist` folder itself, but its contents) to `public_html`.
+   - Alternatively, you can use an **FTP client** (like FileZilla) to upload the contents.
+
+4. **Verify**:
+   Once the upload is complete, your website should be live at your domain.
+
+
